@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="USMC Admin Tools - Free offline-capable tools for Marine Corps administrative tasks">
+  <title>USMC Admin Tools Suite</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B0000">
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <style>
+    /* ========================================
+       CSS Variables
+       ======================================== */
+    :root {
+      --primary: #8B0000;
+      --primary-dark: #6B0000;
+      --primary-light: #A52A2A;
+      --secondary: #003366;
+      --gold: #FFC300;
+
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F9FAFB;
+      --bg-tertiary: #F3F4F6;
+      --surface: #FFFFFF;
+
+      --text-primary: #111827;
+      --text-secondary: #4B5563;
+      --text-tertiary: #6B7280;
+
+      --border-light: #E5E7EB;
+      --border-medium: #D1D5DB;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #111827;
+      --bg-secondary: #1F2937;
+      --bg-tertiary: #374151;
+      --surface: #1F2937;
+
+      --text-primary: #F9FAFB;
+      --text-secondary: #D1D5DB;
+      --text-tertiary: #9CA3AF;
+
+      --border-light: #374151;
+      --border-medium: #4B5563;
+    }
+
+    /* ========================================
+       Base Styles
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ========================================
+       Header
+       ======================================== */
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold);
+    }
+
+    .header__icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .header__title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .header__subtitle {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header__badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--primary-dark);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-top: 1rem;
+    }
+
+    /* ========================================
+       Theme Toggle
+       ======================================== */
+    .theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* ========================================
+       Container
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* ========================================
+       Tools Grid
+       ======================================== */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ========================================
+       Tool Card
+       ======================================== */
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-light);
+    }
+
+    .tool-card__icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-card__title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .tool-card__description {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .tool-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      background: var(--bg-tertiary);
+      color: var(--text-tertiary);
+      border-radius: 4px;
+    }
+
+    .tag--navmc {
+      background: rgba(139, 0, 0, 0.1);
+      color: var(--primary);
+    }
+
+    .tool-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 0.9375rem;
+    }
+
+    .tool-card__link:hover {
+      text-decoration: underline;
+    }
+
+    .tool-card__link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .tool-card--coming-soon {
+      opacity: 0.6;
+    }
+
+    .tool-card--coming-soon .tool-card__link {
+      color: var(--text-tertiary);
+      pointer-events: none;
+    }
+
+    .coming-soon-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--bg-tertiary);
+      color: var(--text-tertiary);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      background: var(--bg-tertiary);
+      padding: 3rem 1rem;
+      margin-top: 2rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature {
+      text-align: center;
+    }
+
+    .feature__icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature__title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature__description {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-tertiary);
+      font-size: 0.875rem;
+    }
+
+    .footer a {
+      color: var(--primary);
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 640px) {
+      .header__title {
+        font-size: 1.75rem;
+      }
+
+      .header__subtitle {
+        font-size: 1rem;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">Dark</button>
+    <div class="header__icon">&#9733;</div>
+    <h1 class="header__title">USMC Admin Tools</h1>
+    <p class="header__subtitle">Free, offline-capable tools for Marine Corps administrative tasks. No accounts, no data collection, works anywhere.</p>
+    <span class="header__badge">100% Free &amp; Open Source</span>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <h2 class="section-title">Available Tools</h2>
+
+    <div class="tools-grid">
+      <!-- Naval Letter Format -->
+      <a href="https://jeranaias.github.io/navalletterformat/" class="tool-card">
+        <div class="tool-card__icon">&#9993;</div>
+        <h3 class="tool-card__title">Naval Letter Format</h3>
+        <p class="tool-card__description">Generate properly formatted naval correspondence with live preview. Supports standard letter, memorandum, and endorsement formats.</p>
+        <div class="tool-card__tags">
+          <span class="tag tag--navmc">SECNAVINST 5216.5E</span>
+          <span class="tag">PDF Export</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- PFT/CFT Proctor -->
+      <a href="https://jeranaias.github.io/pft-cft-proctor/" class="tool-card">
+        <div class="tool-card__icon">&#127939;</div>
+        <h3 class="tool-card__title">PFT/CFT Proctor</h3>
+        <p class="tool-card__description">Calculate PFT and CFT scores with automatic age/gender tables. Generate NAVMC 11622 Performance Worksheets for your unit.</p>
+        <div class="tool-card__tags">
+          <span class="tag tag--navmc">NAVMC 11622</span>
+          <span class="tag">MCO 6100.13A</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- Pros/Cons Generator -->
+      <a href="https://jeranaias.github.io/pros-cons-generator/" class="tool-card">
+        <div class="tool-card__icon">&#128221;</div>
+        <h3 class="tool-card__title">Pros &amp; Cons Generator</h3>
+        <p class="tool-card__description">Create fitness report and proficiency/conduct marks worksheets. Guided prompts help write effective evaluations.</p>
+        <div class="tool-card__tags">
+          <span class="tag tag--navmc">NAVMC 10835</span>
+          <span class="tag">Fitness Reports</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- Page 11 Generator -->
+      <a href="https://jeranaias.github.io/page11-generator/" class="tool-card">
+        <div class="tool-card__icon">&#128203;</div>
+        <h3 class="tool-card__title">Page 11 Generator</h3>
+        <p class="tool-card__description">Generate administrative remarks (Page 11) entries for counselings, awards, and other record book entries.</p>
+        <div class="tool-card__tags">
+          <span class="tag tag--navmc">NAVMC 118(11)</span>
+          <span class="tag">SRB Entries</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- Award Write-up Generator -->
+      <a href="https://jeranaias.github.io/award-writeup-generator/" class="tool-card">
+        <div class="tool-card__icon">&#127942;</div>
+        <h3 class="tool-card__title">Award Write-up Generator</h3>
+        <p class="tool-card__description">Create award citations and write-ups for NAMs, achievement medals, and letters of appreciation with proper formatting.</p>
+        <div class="tool-card__tags">
+          <span class="tag">Citations</span>
+          <span class="tag">NAM/COM</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- OSMEAC Generator -->
+      <a href="https://jeranaias.github.io/osmeac-generator/" class="tool-card">
+        <div class="tool-card__icon">&#127919;</div>
+        <h3 class="tool-card__title">OSMEAC Generator</h3>
+        <p class="tool-card__description">Build 5-paragraph orders using the OSMEAC format. Guided prompts ensure complete operation orders.</p>
+        <div class="tool-card__tags">
+          <span class="tag">5 Para Order</span>
+          <span class="tag">Operations</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- AAR Generator -->
+      <a href="https://jeranaias.github.io/aar-generator/" class="tool-card">
+        <div class="tool-card__icon">&#128214;</div>
+        <h3 class="tool-card__title">AAR Generator</h3>
+        <p class="tool-card__description">Create After Action Reports with structured sustains, improves, and recommendations sections.</p>
+        <div class="tool-card__tags">
+          <span class="tag">After Action</span>
+          <span class="tag">Lessons Learned</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- Restriction Tracker -->
+      <a href="https://jeranaias.github.io/restriction-tracker/" class="tool-card">
+        <div class="tool-card__icon">&#128274;</div>
+        <h3 class="tool-card__title">Restriction Tracker</h3>
+        <p class="tool-card__description">Track Marines on restriction with muster logs, countdown timers, and automatic documentation.</p>
+        <div class="tool-card__tags">
+          <span class="tag">Legal</span>
+          <span class="tag">Tracking</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+
+      <!-- Screening Package Builder -->
+      <a href="https://jeranaias.github.io/screening-package-builder/" class="tool-card">
+        <div class="tool-card__icon">&#128193;</div>
+        <h3 class="tool-card__title">Screening Package Builder</h3>
+        <p class="tool-card__description">Build complete screening packages for B-billets, special duty assignments, and school applications.</p>
+        <div class="tool-card__tags">
+          <span class="tag">B-Billet</span>
+          <span class="tag">Applications</span>
+        </div>
+        <span class="tool-card__link">
+          Open Tool
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </span>
+      </a>
+    </div>
+  </main>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature__icon">&#128274;</div>
+        <h3 class="feature__title">Works Offline</h3>
+        <p class="feature__description">All tools work without internet after first visit. Perfect for the field or ship.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__icon">&#128272;</div>
+        <h3 class="feature__title">No Data Collection</h3>
+        <p class="feature__description">Your data stays on your device. Nothing is sent to servers or stored in the cloud.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__icon">&#128241;</div>
+        <h3 class="feature__title">Mobile Friendly</h3>
+        <p class="feature__description">Works on phones, tablets, and desktops. Add to home screen for app-like experience.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__icon">&#128196;</div>
+        <h3 class="feature__title">PDF Export</h3>
+        <p class="feature__description">Generate properly formatted PDFs ready for printing or digital submission.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Built for Marines, by Marines</p>
+    <p style="margin-top: 0.5rem;">
+      <a href="https://github.com/jeranaias">GitHub</a> &middot;
+      Open Source &middot;
+      No Affiliation with DoD
+    </p>
+  </footer>
+
+  <script>
+    // Theme toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeButton(next);
+    }
+
+    function updateThemeButton(theme) {
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    }
+
+    // Initialize theme
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefers ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      updateThemeButton(theme);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "USMC Admin Tools",
+  "short_name": "USMC Tools",
+  "description": "Free offline-capable tools for Marine Corps administrative tasks",
+  "start_url": "/usmc-tools/",
+  "display": "standalone",
+  "background_color": "#8B0000",
+  "theme_color": "#8B0000",
+  "icons": [
+    {
+      "src": "assets/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "assets/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
