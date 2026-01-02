@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8B0000">
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
-  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -344,6 +344,112 @@
     }
 
     /* ========================================
+       Offline Install Section
+       ======================================== */
+    .offline-install {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 3rem 1rem;
+      text-align: center;
+      color: white;
+    }
+
+    .offline-install__content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .offline-install__title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .offline-install__description {
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .install-all-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--gold);
+      color: var(--primary-dark);
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .install-all-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .install-all-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .install-all-btn__icon {
+      font-size: 1.25rem;
+    }
+
+    .install-progress {
+      margin-top: 1.5rem;
+    }
+
+    .install-progress__bar {
+      background: rgba(255,255,255,0.2);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+
+    .install-progress__fill {
+      background: var(--gold);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 999px;
+    }
+
+    .install-progress__status {
+      font-size: 0.9375rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-checklist {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .tool-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem;
+    }
+
+    .tool-check--done {
+      background: rgba(255, 195, 0, 0.3);
+    }
+
+    .tool-check__icon {
+      font-size: 0.75rem;
+    }
+
+    /* ========================================
        Responsive
        ======================================== */
     @media (max-width: 640px) {
@@ -513,6 +619,25 @@
     </div>
   </main>
 
+  <!-- Offline Install Section -->
+  <section class="offline-install">
+    <div class="offline-install__content">
+      <h2 class="offline-install__title">Prepare All Tools for Offline Use</h2>
+      <p class="offline-install__description">One click to cache all 9 tools for offline use. Perfect before heading to the field.</p>
+      <button id="install-all-btn" class="install-all-btn" onclick="prepareAllOffline()">
+        <span class="install-all-btn__icon">&#8595;</span>
+        <span class="install-all-btn__text">Prepare All for Offline</span>
+      </button>
+      <div id="install-progress" class="install-progress" style="display: none;">
+        <div class="install-progress__bar">
+          <div id="progress-fill" class="install-progress__fill"></div>
+        </div>
+        <div id="progress-status" class="install-progress__status">Preparing...</div>
+        <div id="tool-checklist" class="tool-checklist"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Features Section -->
   <section class="features">
     <div class="features-grid">
@@ -572,6 +697,112 @@
       const theme = saved || (prefers ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
       updateThemeButton(theme);
+    })();
+
+    // Prepare All for Offline
+    const TOOLS = [
+      { name: 'Naval Letter', url: 'https://jeranaias.github.io/navalletterformat/' },
+      { name: 'PFT/CFT Proctor', url: 'https://jeranaias.github.io/pft-cft-proctor/' },
+      { name: 'Pros/Cons', url: 'https://jeranaias.github.io/pros-cons-generator/' },
+      { name: 'Page 11', url: 'https://jeranaias.github.io/page11-generator/' },
+      { name: 'Award Write-up', url: 'https://jeranaias.github.io/award-writeup-generator/' },
+      { name: 'OSMEAC', url: 'https://jeranaias.github.io/osmeac-generator/' },
+      { name: 'AAR', url: 'https://jeranaias.github.io/aar-generator/' },
+      { name: 'Restriction Tracker', url: 'https://jeranaias.github.io/restriction-tracker/' },
+      { name: 'Screening Package', url: 'https://jeranaias.github.io/screening-package-builder/' }
+    ];
+
+    async function prepareAllOffline() {
+      const btn = document.getElementById('install-all-btn');
+      const progress = document.getElementById('install-progress');
+      const progressFill = document.getElementById('progress-fill');
+      const progressStatus = document.getElementById('progress-status');
+      const checklist = document.getElementById('tool-checklist');
+
+      // Disable button and show progress
+      btn.disabled = true;
+      btn.querySelector('.install-all-btn__text').textContent = 'Preparing...';
+      progress.style.display = 'block';
+
+      // Build checklist
+      checklist.innerHTML = TOOLS.map(tool =>
+        `<span class="tool-check" id="check-${tool.name.replace(/[^a-z]/gi, '')}">
+          <span class="tool-check__icon">&#9711;</span>
+          ${tool.name}
+        </span>`
+      ).join('');
+
+      // Load each tool to trigger service worker caching
+      let completed = 0;
+      const container = document.createElement('div');
+      container.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;';
+      document.body.appendChild(container);
+
+      for (const tool of TOOLS) {
+        progressStatus.textContent = `Caching ${tool.name}...`;
+
+        try {
+          // Create hidden iframe to load the tool
+          const iframe = document.createElement('iframe');
+          iframe.style.cssText = 'width:1px;height:1px;border:none;';
+          container.appendChild(iframe);
+
+          // Wait for iframe to load
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              resolve(); // Resolve anyway after timeout
+            }, 8000);
+
+            iframe.onload = () => {
+              clearTimeout(timeout);
+              // Give service worker time to cache
+              setTimeout(resolve, 1000);
+            };
+            iframe.onerror = () => {
+              clearTimeout(timeout);
+              resolve(); // Continue even on error
+            };
+            iframe.src = tool.url;
+          });
+
+          // Mark as done
+          const checkEl = document.getElementById('check-' + tool.name.replace(/[^a-z]/gi, ''));
+          if (checkEl) {
+            checkEl.classList.add('tool-check--done');
+            checkEl.querySelector('.tool-check__icon').innerHTML = '&#10003;';
+          }
+        } catch (e) {
+          console.warn('Failed to cache:', tool.name, e);
+        }
+
+        completed++;
+        progressFill.style.width = (completed / TOOLS.length * 100) + '%';
+      }
+
+      // Cleanup
+      document.body.removeChild(container);
+
+      // Done
+      progressStatus.textContent = 'All tools ready for offline use!';
+      btn.querySelector('.install-all-btn__text').textContent = 'All Ready!';
+      btn.querySelector('.install-all-btn__icon').innerHTML = '&#10003;';
+
+      // Store completion
+      localStorage.setItem('offlinePrepared', Date.now());
+    }
+
+    // Check if already prepared
+    (function() {
+      const prepared = localStorage.getItem('offlinePrepared');
+      if (prepared) {
+        const btn = document.getElementById('install-all-btn');
+        const age = Date.now() - parseInt(prepared);
+        const days = Math.floor(age / (1000 * 60 * 60 * 24));
+        if (days < 7) {
+          btn.querySelector('.install-all-btn__icon').innerHTML = '&#10003;';
+          btn.querySelector('.install-all-btn__text').textContent = 'Refresh Offline Cache';
+        }
+      }
     })();
   </script>
 </body>
