@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate proficiency and conduct marking statements with keyword banks, customizable templates, and proper formatting for USMC counselings.">
+  <title>Pros/Cons Generator - USMC Tools</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B0000">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- jsPDF for PDF generation (local copy for offline support) -->
+  <script src="lib/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Skip Link - Accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="header no-print">
+    <div class="container">
+      <div class="header__content">
+        <div>
+          <h1 class="header__title">Pros/Cons Generator</h1>
+          <p class="header__subtitle">Proficiency & Conduct Marking Statement Builder</p>
+        </div>
+        <button id="themeToggle" class="btn btn--ghost theme-toggle" aria-label="Toggle theme (Dark/Light/Night)" title="Toggle theme">
+          <svg class="icon icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="icon icon--sun hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon icon--tactical hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Scarlet Accent Line -->
+  <div class="header-accent"></div>
+
+  <!-- Tagline -->
+  <div class="tagline no-print">
+    <div class="container">
+      <span class="tagline__text">Free tool for Marines · </span>
+      <a href="https://github.com/jeranaias/pros-cons-generator#readme" class="tagline__link">Documentation & Guide →</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main" class="container main-content">
+    <!-- Split Screen Layout -->
+    <div class="split-layout">
+      <!-- Left Panel - Editor -->
+      <div class="editor-panel">
+        <!-- Marine Info Section -->
+        <div class="card card--section mb-4">
+          <div class="card__header">
+            <h2 class="card__title card__title--section">Marine Information</h2>
+            <p class="card__subtitle">Optional identifying info - included in PDF export</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="label" for="marineName">Name</label>
+              <input type="text" class="input" id="marineName" placeholder="e.g., SMITH, JOHN A">
+            </div>
+            <div class="form-group">
+              <label class="label" for="marineRank">Rank</label>
+              <select class="input select" id="marineRank">
+                <option value="">Select Rank</option>
+                <option value="Pvt">Pvt</option>
+                <option value="PFC">PFC</option>
+                <option value="LCpl">LCpl</option>
+                <option value="Cpl">Cpl</option>
+                <option value="Sgt">Sgt</option>
+                <option value="SSgt">SSgt</option>
+                <option value="GySgt">GySgt</option>
+                <option value="MSgt">MSgt</option>
+                <option value="1stSgt">1stSgt</option>
+                <option value="MGySgt">MGySgt</option>
+                <option value="SgtMaj">SgtMaj</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="label" for="marineUnit">Unit</label>
+              <input type="text" class="input" id="marineUnit" placeholder="e.g., 1st Bn, 5th Marines">
+            </div>
+            <div class="form-group">
+              <label class="label" for="markingPeriod">Marking Period</label>
+              <input type="text" class="input" id="markingPeriod" placeholder="e.g., 01 Aug 2024 - 31 Jan 2025">
+            </div>
+          </div>
+        </div>
+
+        <!-- Evaluation Settings Section -->
+        <div class="card card--section mb-4">
+          <div class="card__header">
+            <h2 class="card__title card__title--section">Evaluation Settings</h2>
+            <p class="card__subtitle">Set performance level and MOS type for phrase suggestions</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="label" for="performanceLevel">Performance Level</label>
+              <select class="input select" id="performanceLevel">
+                <option value="5.0">Outstanding (5.0)</option>
+                <option value="4.5">Excellent (4.5)</option>
+                <option value="4.0" selected>Above Average (4.0)</option>
+                <option value="3.5">Slightly Above Average (3.5)</option>
+                <option value="3.0">Average (3.0)</option>
+                <option value="2.5">Below Average (2.5)</option>
+                <option value="2.0">Poor (2.0)</option>
+                <option value="1.5">Very Poor (1.5)</option>
+                <option value="1.0">Failing (1.0)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="label" for="mosType">MOS Type</label>
+              <select class="input select" id="mosType">
+                <option value="general" selected>General</option>
+                <option value="admin">Admin/Personnel</option>
+                <option value="combat">Combat Arms</option>
+                <option value="aviation">Aviation</option>
+                <option value="logistics">Logistics</option>
+                <option value="communications">Communications</option>
+                <option value="intelligence">Intelligence</option>
+                <option value="motor-t">Motor Transport</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Button Group -->
+        <div class="action-button-group mb-4">
+          <button class="btn btn--preview" id="previewToggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            Live Preview
+          </button>
+          <button class="btn btn--secondary-outline" id="loadExample">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Load Example
+          </button>
+        </div>
+
+        <!-- Proficiency Section -->
+        <div class="card card--section mb-4">
+          <div class="card__header flex justify-between items-center">
+            <div>
+              <h2 class="card__title card__title--section">Proficiency Statement</h2>
+              <p class="card__subtitle">Describe duty performance, technical skills, and leadership</p>
+            </div>
+            <button class="btn btn--dashed btn--sm" id="openProPhraseBank">+ Add Phrase</button>
+          </div>
+          <div class="form-group">
+            <textarea
+              class="input textarea"
+              id="proficiencyStatement"
+              rows="5"
+              placeholder="Enter proficiency statement..."
+              maxlength="500"
+            ></textarea>
+            <div class="flex justify-between items-center mt-2">
+              <span class="char-counter" id="proCharCount">0/500</span>
+              <button class="btn btn--ghost btn--sm" id="clearPro">Clear</button>
+            </div>
+          </div>
+          <div class="quick-phrases" id="proQuickPhrases">
+            <span class="quick-phrases__label">Quick Phrases:</span>
+            <div class="quick-phrases__list" id="proQuickPhrasesList"></div>
+          </div>
+        </div>
+
+        <!-- Conduct Section -->
+        <div class="card card--section mb-4">
+          <div class="card__header flex justify-between items-center">
+            <div>
+              <h2 class="card__title card__title--section">Conduct Statement</h2>
+              <p class="card__subtitle">Describe bearing, behavior, influence, and compliance</p>
+            </div>
+            <button class="btn btn--dashed btn--sm" id="openConPhraseBank">+ Add Phrase</button>
+          </div>
+          <div class="form-group">
+            <textarea
+              class="input textarea"
+              id="conductStatement"
+              rows="5"
+              placeholder="Enter conduct statement..."
+              maxlength="500"
+            ></textarea>
+            <div class="flex justify-between items-center mt-2">
+              <span class="char-counter" id="conCharCount">0/500</span>
+              <button class="btn btn--ghost btn--sm" id="clearCon">Clear</button>
+            </div>
+          </div>
+          <div class="quick-phrases" id="conQuickPhrases">
+            <span class="quick-phrases__label">Quick Phrases:</span>
+            <div class="quick-phrases__list" id="conQuickPhrasesList"></div>
+          </div>
+        </div>
+
+        <!-- Mark Recommendation Section -->
+        <div class="card card--section mb-4">
+          <div class="card__header">
+            <h2 class="card__title card__title--section">Recommended Marks</h2>
+            <p class="card__subtitle">Select proficiency and conduct marks for the evaluation</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="label" for="proMark">Proficiency Mark</label>
+              <select class="input select" id="proMark">
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="label" for="conMark">Conduct Mark</label>
+              <select class="input select" id="conMark">
+              </select>
+            </div>
+          </div>
+          <div id="alignmentWarning" class="alert alert--info mt-4 hidden">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span id="alignmentMessage"></span>
+          </div>
+        </div>
+
+        <!-- Templates Section -->
+        <div class="card card--section mb-4">
+          <div class="card__header">
+            <h2 class="card__title card__title--section">Statement Templates</h2>
+            <p class="card__subtitle">Pre-formatted templates for common evaluation situations</p>
+          </div>
+          <div class="template-buttons flex flex-wrap gap-2">
+            <button class="btn btn--outline btn--sm" data-template="promotion">Promotion Statement</button>
+            <button class="btn btn--outline btn--sm" data-template="semiannual">Semi-Annual Counseling</button>
+            <button class="btn btn--outline btn--sm" data-template="adverse">Adverse Counseling</button>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card action-bar">
+          <div class="flex flex-wrap gap-3 justify-between">
+            <div class="flex flex-wrap gap-3">
+              <button class="btn btn--outline-primary" id="copyToClipboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy to Clipboard
+              </button>
+              <button class="btn btn--primary" id="exportPDF">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                Export PDF
+              </button>
+              <button class="btn btn--secondary" id="saveDraft">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                Save Draft
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <button class="btn btn--outline" id="loadDraft">Load Draft</button>
+              <button class="btn btn--ghost" id="resetForm">Reset All</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- End Editor Panel -->
+    </div><!-- End Split Layout -->
+
+    <!-- Live PDF Preview Pane -->
+    <div id="livePreviewPane" class="live-preview-pane">
+      <div class="preview-header">
+        <span>Live Preview</span>
+        <div class="preview-header-controls">
+          <select id="previewFormatSelect" class="preview-format-select">
+            <option value="worksheet">Counseling Worksheet</option>
+            <option value="card">Statement Card</option>
+          </select>
+          <button type="button" class="preview-close" id="closePreview" aria-label="Close preview">&times;</button>
+        </div>
+      </div>
+      <div id="previewLoading" class="preview-loading">
+        <div class="spinner"></div>
+        <span>Generating preview...</span>
+      </div>
+      <iframe id="previewFrame" class="preview-frame" title="PDF Preview"></iframe>
+    </div>
+
+    <!-- Copy Success Toast -->
+    <div id="toast" class="toast hidden">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <!-- Install App / Offline Guide -->
+    <details class="card card--section mb-4 no-print" id="install-guide">
+      <summary class="card__title card__title--section" style="cursor: pointer; padding: var(--space-4);">
+        Install for Offline Use
+      </summary>
+      <div class="p-4">
+        <div class="text-sm text-secondary">
+          <p style="margin-bottom: 1rem;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+          <!-- Install Button (shown when PWA install is available) -->
+          <button type="button" id="pwa-install-btn" class="btn btn--primary btn--sm mb-4" style="display: none;">
+            Install App
+          </button>
+
+          <p style="margin-bottom: 0.5rem;"><strong>Desktop (Chrome/Edge):</strong></p>
+          <p style="margin-bottom: 1rem;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+          <p style="margin-bottom: 0.5rem;"><strong>iPhone/iPad:</strong></p>
+          <p style="margin-bottom: 1rem;">Tap Share → "Add to Home Screen"</p>
+
+          <p style="margin-bottom: 0.5rem;"><strong>Android:</strong></p>
+          <p style="margin-bottom: 1rem;">Tap the menu (3 dots) → "Add to Home Screen" or "Install App"</p>
+
+          <p style="margin-top: 1rem; opacity: 0.8;"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <!-- Phrase Bank Modal -->
+  <div class="modal-overlay" id="phraseBankModal">
+    <div class="modal">
+      <div class="modal__header flex justify-between items-center">
+        <h3 class="modal__title" id="phraseBankTitle">Phrase Bank - Proficiency</h3>
+        <button class="btn btn--ghost btn--sm" id="closeModal">&times;</button>
+      </div>
+      <div class="modal__body">
+        <div class="form-group">
+          <label class="label" for="phraseLevel">Performance Level</label>
+          <select class="input select" id="phraseLevel">
+            <option value="5.0">Outstanding (5.0)</option>
+            <option value="4.5">Excellent (4.5)</option>
+            <option value="4.0" selected>Above Average (4.0)</option>
+            <option value="3.5">Average (3.0-3.5)</option>
+            <option value="2.5">Below Average (2.0-2.5)</option>
+            <option value="1.5">Poor (1.0-1.5)</option>
+          </select>
+        </div>
+        <div class="phrase-list" id="phraseList">
+          <!-- Phrases will be populated by JS -->
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="cancelPhrases">Cancel</button>
+        <button class="btn btn--primary" id="addSelectedPhrases">Add Selected</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Draft Modal -->
+  <div class="modal-overlay" id="saveDraftModal">
+    <div class="modal">
+      <div class="modal__header flex justify-between items-center">
+        <h3 class="modal__title">Save Draft</h3>
+        <button class="btn btn--ghost btn--sm" id="closeSaveModal">&times;</button>
+      </div>
+      <div class="modal__body">
+        <div class="form-group">
+          <label class="label label--required" for="draftName">Marine's Name / Draft Title</label>
+          <input type="text" class="input" id="draftName" placeholder="e.g., LCpl Smith - Jan 2025">
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="cancelSave">Cancel</button>
+        <button class="btn btn--primary" id="confirmSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Draft Modal -->
+  <div class="modal-overlay" id="loadDraftModal">
+    <div class="modal">
+      <div class="modal__header flex justify-between items-center">
+        <h3 class="modal__title">Load Draft</h3>
+        <button class="btn btn--ghost btn--sm" id="closeLoadModal">&times;</button>
+      </div>
+      <div class="modal__body">
+        <div class="draft-list" id="draftList">
+          <!-- Drafts will be populated by JS -->
+        </div>
+        <p class="text-secondary text-sm" id="noDrafts">No saved drafts found.</p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="cancelLoad">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export PDF Modal -->
+  <div class="modal-overlay" id="exportPdfModal">
+    <div class="modal">
+      <div class="modal__header flex justify-between items-center">
+        <h3 class="modal__title">Export PDF</h3>
+        <button class="btn btn--ghost btn--sm" id="closeExportModal">&times;</button>
+      </div>
+      <div class="modal__body">
+        <p class="text-secondary text-sm mb-4">Choose your export format:</p>
+        <div class="export-options">
+          <div class="export-option" id="exportWorksheet">
+            <div class="export-option__icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <div class="export-option__info">
+              <h4>Counseling Worksheet</h4>
+              <p>Full format with header, statements, marks, date and signature lines</p>
+            </div>
+          </div>
+          <div class="export-option" id="exportCard">
+            <div class="export-option__icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="7" y1="8" x2="17" y2="8"></line>
+                <line x1="7" y1="12" x2="17" y2="12"></line>
+                <line x1="7" y1="16" x2="13" y2="16"></line>
+              </svg>
+            </div>
+            <div class="export-option__info">
+              <h4>Statement Card</h4>
+              <p>Simple format with just statements and marks - compact printable</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="cancelExport">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer no-print">
+    <div class="container">
+      <p class="text-sm text-secondary text-center">
+        Pros/Cons Generator v1.0 · Part of <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> · <a href="https://github.com/jeranaias/pros-cons-generator">GitHub</a> · <a href="https://github.com/jeranaias/pros-cons-generator/issues">Report Issue</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/phrases.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/alignment.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>

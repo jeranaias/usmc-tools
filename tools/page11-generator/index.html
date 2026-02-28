@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 11 Entry Generator | Free NAVMC 118(11) Tool | USMC</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Free online Page 11 Entry Generator for Marines. Creates MCO P1070.12K (IRAM) compliant NAVMC 118(11) administrative remarks. Instant PDF download, works on NMCI.">
+  <meta name="keywords" content="page 11, NAVMC 118(11), administrative remarks, USMC, Marine Corps, counseling, 6105, IRAM, MCO P1070.12K, service record, page 11 generator, military admin, S-1, personnel, admin clerk">
+  <meta name="author" content="USMC Tools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeranaias.github.io/page11-generator/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jeranaias.github.io/page11-generator/">
+  <meta property="og:title" content="Page 11 Entry Generator | Free NAVMC 118(11) Tool">
+  <meta property="og:description" content="Free online tool for Marines. Creates properly formatted Page 11 entries. Instant PDF, works on NMCI, no install needed.">
+  <meta property="og:site_name" content="Page 11 Entry Generator">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Page 11 Entry Generator | Free NAVMC 118(11) Tool">
+  <meta name="twitter:description" content="Free online tool for Marines. Creates properly formatted Page 11 entries.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B0000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Page 11 Gen">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Page 11 Entry Generator",
+    "alternateName": ["NAVMC 118(11) Generator", "Page 11 Generator", "6105 Generator"],
+    "description": "Free online tool for creating MCO P1070.12K (IRAM) compliant Page 11 administrative remarks entries for the United States Marine Corps",
+    "url": "https://jeranaias.github.io/page11-generator/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Works on NMCI and government computers.",
+    "softwareVersion": "1.0.0",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "MCO P1070.12K (IRAM) compliant formatting",
+      "16 pre-built templates",
+      "6105 counseling with UCMJ article dropdown",
+      "Instant PDF generation",
+      "Works on NMCI computers",
+      "Live preview",
+      "Dark mode",
+      "No installation required"
+    ]
+  }
+  </script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Skip Link - Accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="header no-print">
+    <div class="header-controls">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon"></span>
+      </button>
+    </div>
+    <h1 class="header__title">PAGE 11 GENERATOR</h1>
+    <p class="header__subtitle">MCO P1070.12K (IRAM) Compliant · NAVMC 118(11)</p>
+  </header>
+
+  <p class="intro-link no-print">
+    Free tool for Marines · <a href="https://github.com/jeranaias/page11-generator#readme" target="_blank">Documentation &amp; Guide &rarr;</a>
+  </p>
+
+  <!-- Main Content -->
+  <main id="main" class="container">
+    <!-- Step 1: Category & Type Selection -->
+    <section id="step-select" class="card card--elevated">
+      <div class="card__header">
+        <h2 class="section-title">SELECT ENTRY TYPE</h2>
+        <p class="help-text">Choose the type of Page 11 entry to generate</p>
+      </div>
+
+      <!-- Category Selection Cards -->
+      <div class="category-cards" id="categoryCards">
+        <button type="button" class="category-card category-card--primary" data-category="6105">
+          <span class="category-card__title">6105 Counseling</span>
+          <span class="category-card__desc">UCMJ violations, adverse counseling</span>
+        </button>
+        <button type="button" class="category-card" data-category="adverse">
+          <span class="category-card__title">Adverse Action</span>
+          <span class="category-card__desc">NJP, page 11 warning, etc.</span>
+        </button>
+        <button type="button" class="category-card" data-category="counseling">
+          <span class="category-card__title">Counseling</span>
+          <span class="category-card__desc">Performance, initial, transfer</span>
+        </button>
+        <button type="button" class="category-card" data-category="training">
+          <span class="category-card__title">Training &amp; Quals</span>
+          <span class="category-card__desc">MOS, PME, weapons, schools</span>
+        </button>
+        <button type="button" class="category-card" data-category="admin">
+          <span class="category-card__title">Admin Entries</span>
+          <span class="category-card__desc">SGLI, allotments, PCS</span>
+        </button>
+        <button type="button" class="category-card" data-category="recognition">
+          <span class="category-card__title">Recognition</span>
+          <span class="category-card__desc">Awards, achievements, LOA</span>
+        </button>
+        <button type="button" class="category-card" data-category="custom">
+          <span class="category-card__title">Custom Entry</span>
+          <span class="category-card__desc">Write your own entry</span>
+        </button>
+      </div>
+
+      <!-- Quick Actions Toolbar -->
+      <div class="quick-toolbar">
+        <button type="button" class="btn btn--primary" id="previewToggle">Live Preview</button>
+        <button type="button" class="btn btn--secondary" id="menuToggle">Menu &#9662;</button>
+      </div>
+      <div id="menuDropdown" class="menu-dropdown" style="display: none;">
+        <button type="button" class="menu-item" id="loadDraftBtn">Load Saved Draft</button>
+        <button type="button" class="menu-item" id="clearFormBtn">Clear Form</button>
+      </div>
+
+      <!-- Hidden select for JS compatibility -->
+      <select class="visually-hidden" id="categorySelect" aria-hidden="true">
+        <option value="">Select a category...</option>
+        <option value="training">Training &amp; Qualifications</option>
+        <option value="counseling">Counselings (Non-Adverse)</option>
+        <option value="adverse">Adverse Counselings</option>
+        <option value="6105">6105 Counseling</option>
+        <option value="admin">Administrative Entries</option>
+        <option value="recognition">Recognition</option>
+        <option value="custom">Custom Entry</option>
+      </select>
+
+      <div class="form-group" id="templateSelectGroup" style="display: none;">
+        <label class="label" for="templateSelect">Entry Type</label>
+        <select class="input select" id="templateSelect">
+          <option value="">Select entry type...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="label" for="entryDate">Entry Date</label>
+        <input type="date" class="input" id="entryDate">
+        <p class="help-text" id="formattedDate"></p>
+      </div>
+
+      <!-- Marine Identification (matches actual NAVMC 118(11) form) -->
+      <div class="marine-info-card">
+        <p class="marine-info-label">Marine Information (for PDF form header)</p>
+        <div class="marine-info-grid marine-info-grid--two">
+          <div class="form-group">
+            <label class="label" for="marineName">NAME (last, first, middle initial)</label>
+            <input type="text" class="input" id="marineName" placeholder="DOE, JOHN A" autocomplete="off">
+            <p class="help-text">Format: LASTNAME, FIRSTNAME MI (e.g., SMITH, JOHN A)</p>
+          </div>
+          <div class="form-group">
+            <label class="label" for="marineEDIPI">EDIPI</label>
+            <input type="text" class="input" id="marineEDIPI" placeholder="1234567890" maxlength="10" pattern="[0-9]{10}" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <button class="btn btn--primary" id="nextBtn" disabled>Next: Fill Template</button>
+      </div>
+    </section>
+
+    <!-- Step 2: Template Fill -->
+    <section id="step-fill" class="card card--elevated" style="display: none;">
+      <div class="card__header">
+        <h2 class="section-title" id="templateTitle">FILL TEMPLATE</h2>
+        <p class="help-text">Complete the required fields - use Live Preview to see your entry</p>
+      </div>
+
+      <div id="templateFields"></div>
+
+      <div class="flex gap-3 justify-end mt-4">
+        <button class="btn btn--outline" id="backBtn">Back</button>
+        <button class="btn btn--primary" id="generateBtn">Generate &amp; Download PDF</button>
+      </div>
+    </section>
+
+    <!-- Step 3: Preview & Output -->
+    <section id="step-preview" class="card card--elevated" style="display: none;">
+      <div class="card__header">
+        <h2 class="section-title">GENERATED ENTRY</h2>
+        <p class="help-text">Review your Page 11 entry and download as PDF</p>
+      </div>
+
+      <!-- Primary Action: Download PDF -->
+      <div class="pdf-actions">
+        <button class="btn btn--primary btn--lg btn--full" id="downloadPdfBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <polyline points="9 15 12 18 15 15"></polyline>
+          </svg>
+          Download NAVMC 118(11) PDF
+        </button>
+      </div>
+
+      <div class="preview-box" id="previewBox">
+        <div class="preview-content" id="previewContent"></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn--outline" id="copyBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy Text
+        </button>
+        <button class="btn btn--outline" id="printBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print
+        </button>
+        <button class="btn btn--outline" id="saveDraftBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Save Draft
+        </button>
+        <button class="btn btn--ghost" id="newEntryBtn">New Entry</button>
+      </div>
+    </section>
+
+    <!-- Saved Drafts -->
+    <section id="drafts-section" class="card" style="display: none;">
+      <div class="card__header">
+        <h2 class="section-title">SAVED DRAFTS</h2>
+      </div>
+      <div id="draftsList"></div>
+    </section>
+
+    <!-- Install App / Offline Guide -->
+    <details class="card no-print" id="install-guide">
+      <summary class="section-title">
+        INSTALL FOR OFFLINE USE
+      </summary>
+      <div style="padding: var(--space-4);">
+        <div class="text-sm text-secondary">
+          <p style="margin-bottom: 1rem;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+          <button type="button" id="pwa-install-btn" class="btn btn--primary btn--sm" style="display: none; margin-bottom: 1rem;">
+            Install App
+          </button>
+
+          <p style="margin-bottom: 0.5rem;"><strong>Desktop (Chrome/Edge):</strong></p>
+          <p style="margin-bottom: 1rem;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+          <p style="margin-bottom: 0.5rem;"><strong>iPhone/iPad:</strong></p>
+          <p style="margin-bottom: 1rem;">Tap Share → "Add to Home Screen"</p>
+
+          <p style="margin-bottom: 0.5rem;"><strong>Android:</strong></p>
+          <p style="margin-bottom: 1rem;">Tap the menu (⋮) → "Add to Home Screen" or "Install App"</p>
+
+          <p style="margin-top: 1rem; opacity: 0.8;"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+        </div>
+      </div>
+    </details>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer no-print">
+    <div class="container">
+      <p class="text-sm text-secondary text-center">
+        Based on MCO P1070.12K (IRAM) Chapter 4. Free and open source.
+      </p>
+      <p class="text-sm text-secondary text-center mt-4">
+        <a href="https://github.com/jeranaias/page11-generator">GitHub</a> ·
+        <a href="https://github.com/jeranaias/page11-generator/issues">Report Issue</a> ·
+        Part of the <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> suite
+      </p>
+    </div>
+  </footer>
+
+  <!-- Print-only content -->
+  <div class="print-only" id="printContent"></div>
+
+  <!-- Live PDF Preview Pane -->
+  <div id="livePreviewPane" class="live-preview-pane no-print">
+    <div class="preview-pane-header">
+      <span>Live Preview</span>
+      <button type="button" class="preview-close" id="previewClose" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="previewLoading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating...</span>
+    </div>
+    <iframe id="previewFrame" class="preview-frame" title="PDF Preview"></iframe>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/date-utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/pdf-generator.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Free digital muster log for USMC personnel on restriction or EPD. Mobile-friendly sign-in tracking with PDF export. No installation, no account required.">
+  <meta name="keywords" content="USMC, Marine Corps, restriction, EPD, muster, sign-in, tracker, military, NJP, Article 15">
+  <meta name="author" content="USMC Tools">
+  <meta name="robots" content="index, follow">
+  <title>Restriction Tracker - USMC Tools</title>
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Restriction Tracker - USMC Tools">
+  <meta property="og:description" content="Free digital muster log for personnel on restriction or EPD. Mobile-friendly, works offline.">
+  <meta property="og:url" content="https://jeranaias.github.io/restriction-tracker/">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#5C1A1A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Restriction">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="css/styles.css" as="style">
+  <link rel="preload" href="lib/jspdf.umd.min.js" as="script">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Skip Link - Accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="header no-print">
+    <div class="header__actions header__actions--left">
+      <button type="button" class="header__btn" id="settings-btn" aria-label="Settings" title="Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="header__center">
+      <span class="header__logo" aria-hidden="true">&#128221;</span>
+      <h1 class="header__title">RESTRICTION TRACKER</h1>
+      <p class="header__subtitle">Restriction & EPD Muster Sign-In Log</p>
+    </div>
+    <div class="header__actions header__actions--right">
+      <button type="button" class="header__btn" id="theme-btn" aria-label="Toggle theme" title="Toggle theme (Dark/Light/Night)">
+        <svg id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Tagline -->
+  <div class="tagline no-print">
+    <span>Free tool for Marines</span>
+    <span class="tagline__separator">·</span>
+    <a href="https://github.com/jeranaias/restriction-tracker#readme" target="_blank" class="tagline__link">Documentation & Guide →</a>
+  </div>
+
+  <!-- Top Navigation Tabs -->
+  <nav class="top-tabs no-print" id="top-tabs">
+    <button type="button" class="top-tabs__tab top-tabs__tab--active" data-tab="roster">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      Roster
+    </button>
+    <button type="button" class="top-tabs__tab" data-tab="reports">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+      </svg>
+      Reports
+    </button>
+    <button type="button" class="top-tabs__tab" data-tab="settings">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+      Settings
+    </button>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main" class="container main-content">
+
+    <!-- Roster View (Default) -->
+    <section id="roster-view" class="view view--active">
+      <div class="view__header">
+        <div>
+          <h2 class="view__title">Active Restrictees</h2>
+          <p class="view__helper">Personnel currently on restriction or EPD</p>
+        </div>
+        <button type="button" class="btn btn--primary" id="add-person-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add Person
+        </button>
+      </div>
+
+      <!-- Roster List -->
+      <div id="roster-list" class="roster-list">
+        <!-- Dynamically populated -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state hidden">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <h3>No Active Restrictees</h3>
+        <p>Add personnel to begin tracking muster sign-ins.</p>
+        <button type="button" class="btn btn--primary" id="add-first-btn">Add First Person</button>
+      </div>
+
+      <!-- Completed Section -->
+      <div id="completed-section" class="completed-section hidden">
+        <button type="button" class="completed-toggle" id="completed-toggle">
+          <span>Completed Restrictions</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div id="completed-list" class="completed-list hidden">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign-In View -->
+    <section id="signin-view" class="view">
+      <div class="view__back">
+        <button type="button" class="btn btn--ghost" id="signin-back-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back
+        </button>
+        <span class="view__back-title">Muster Check-In</span>
+      </div>
+
+      <div class="signin-content">
+        <div class="signin-person" id="signin-person-info">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="signin-buttons">
+          <button type="button" class="signin-btn signin-btn--present" id="signin-present">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>PRESENT</span>
+            <small>Tap to sign in</small>
+          </button>
+
+          <div class="signin-secondary">
+            <button type="button" class="signin-btn signin-btn--late" id="signin-late">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>LATE</span>
+            </button>
+
+            <button type="button" class="signin-btn signin-btn--missed" id="signin-missed">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+              <span>MISSED</span>
+            </button>
+          </div>
+
+          <button type="button" class="signin-btn signin-btn--excused" id="signin-excused">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>EXCUSED (Add Note)</span>
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label for="signin-recorder" class="label">Recorded by:</label>
+          <input type="text" id="signin-recorder" class="input" placeholder="e.g., SSgt Garcia">
+        </div>
+
+        <div class="form-group hidden" id="signin-notes-group">
+          <label for="signin-notes" class="label">Notes:</label>
+          <textarea id="signin-notes" class="input textarea" rows="2" placeholder="Reason for late/missed/excused..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detail View -->
+    <section id="detail-view" class="view">
+      <div class="view__back">
+        <button type="button" class="btn btn--ghost" id="detail-back-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Roster
+        </button>
+        <span class="view__back-title" id="detail-title">Individual Log</span>
+      </div>
+
+      <div id="detail-content" class="detail-content">
+        <!-- Populated dynamically -->
+      </div>
+
+      <div class="detail-actions">
+        <button type="button" class="btn btn--primary" id="detail-export-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export PDF
+        </button>
+        <button type="button" class="btn btn--outline" id="detail-edit-btn">Edit Details</button>
+        <button type="button" class="btn btn--danger" id="detail-end-btn">End Restriction</button>
+      </div>
+    </section>
+
+    <!-- Add/Edit Person Form View -->
+    <section id="form-view" class="view">
+      <div class="view__back">
+        <button type="button" class="btn btn--ghost" id="form-cancel-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Cancel
+        </button>
+        <span class="view__back-title" id="form-title">Add Restrictee</span>
+        <button type="button" class="btn btn--primary" id="form-save-btn">Save</button>
+      </div>
+
+      <form id="person-form" class="person-form">
+        <fieldset>
+          <legend>Personal Information</legend>
+
+          <div class="form-row">
+            <div class="form-group form-group--small">
+              <label for="person-rank" class="label label--required">Rank</label>
+              <select id="person-rank" class="input select" required>
+                <option value="">Select...</option>
+                <option value="Pvt">Pvt</option>
+                <option value="PFC">PFC</option>
+                <option value="LCpl">LCpl</option>
+                <option value="Cpl">Cpl</option>
+                <option value="Sgt">Sgt</option>
+                <option value="SSgt">SSgt</option>
+                <option value="GySgt">GySgt</option>
+                <option value="MSgt">MSgt</option>
+                <option value="1stSgt">1stSgt</option>
+                <option value="MGySgt">MGySgt</option>
+                <option value="SgtMaj">SgtMaj</option>
+                <option value="2ndLt">2ndLt</option>
+                <option value="1stLt">1stLt</option>
+                <option value="Capt">Capt</option>
+                <option value="Maj">Maj</option>
+                <option value="LtCol">LtCol</option>
+                <option value="Col">Col</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="person-lastname" class="label label--required">Last Name</label>
+              <input type="text" id="person-lastname" class="input" required>
+            </div>
+            <div class="form-group">
+              <label for="person-firstname" class="label label--required">First Name</label>
+              <input type="text" id="person-firstname" class="input" required>
+            </div>
+            <div class="form-group form-group--tiny">
+              <label for="person-mi" class="label">MI</label>
+              <input type="text" id="person-mi" class="input" maxlength="1">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="person-edipi" class="label">EDIPI</label>
+              <input type="text" id="person-edipi" class="input" placeholder="Optional">
+            </div>
+            <div class="form-group">
+              <label for="person-unit" class="label">Unit</label>
+              <input type="text" id="person-unit" class="input" placeholder="e.g., 1st Plt, Alpha Co">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Restriction Details</legend>
+
+          <div class="form-group">
+            <label class="label label--required">Type</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="restriction-type" value="restriction" class="radio" checked>
+                Restriction
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="restriction-type" value="epd" class="radio">
+                Extra Punitive Duty (EPD)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="restriction-type" value="correctional_custody" class="radio">
+                Correctional Custody
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="person-startdate" class="label label--required">Start Date</label>
+              <input type="date" id="person-startdate" class="input" required>
+            </div>
+            <div class="form-group form-group--small">
+              <label for="person-days" class="label label--required">Days Awarded</label>
+              <input type="number" id="person-days" class="input" min="1" max="60" required>
+            </div>
+            <div class="form-group">
+              <label for="person-enddate" class="label">End Date</label>
+              <input type="date" id="person-enddate" class="input" readonly>
+              <span class="help-text">Calculated automatically</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="person-offense" class="label">Offense/Reason</label>
+            <textarea id="person-offense" class="input textarea" rows="2" placeholder="Optional - reason for restriction"></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Muster Schedule</legend>
+
+          <div class="form-group">
+            <label class="label label--required">Required Muster Times</label>
+            <div class="muster-times-grid">
+              <label class="checkbox-label">
+                <input type="checkbox" class="checkbox muster-time-cb" value="0600" checked>
+                0600
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" class="checkbox muster-time-cb" value="1200" checked>
+                1200
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" class="checkbox muster-time-cb" value="1800" checked>
+                1800
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" class="checkbox muster-time-cb" value="2200" checked>
+                2200
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Add Custom Time</label>
+            <div class="custom-time-row">
+              <input type="time" id="custom-muster-time" class="input">
+              <button type="button" class="btn btn--outline" id="add-custom-time-btn">Add</button>
+            </div>
+            <div id="custom-times-list" class="custom-times-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Notes</legend>
+          <div class="form-group">
+            <textarea id="person-notes" class="input textarea" rows="3" placeholder="General notes about this restriction..."></textarea>
+          </div>
+        </fieldset>
+      </form>
+    </section>
+
+    <!-- Daily Report View -->
+    <section id="report-view" class="view">
+      <div class="view__back">
+        <button type="button" class="btn btn--ghost" id="report-back-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back
+        </button>
+        <span class="view__back-title">Daily Report</span>
+        <button type="button" class="btn btn--primary" id="report-export-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export PDF
+        </button>
+      </div>
+
+      <div class="report-controls">
+        <div class="form-group">
+          <label for="report-date" class="label">Report Date</label>
+          <input type="date" id="report-date" class="input">
+        </div>
+      </div>
+
+      <div id="report-content" class="report-content">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+    <!-- Install App / Offline Guide -->
+    <details class="card mb-4 no-print" id="install-guide">
+      <summary class="card__title" style="cursor: pointer; padding: var(--space-4);">
+        Install for Offline Use
+      </summary>
+      <div class="p-4">
+        <div class="text-sm text-secondary">
+          <p style="margin-bottom: 1rem;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+          <!-- Install Button (shown when PWA install is available) -->
+          <button type="button" id="pwa-install-btn" class="btn btn--primary btn--sm mb-4" style="display: none;">
+            Install App
+          </button>
+
+          <p style="margin-bottom: 0.5rem;"><strong>Desktop (Chrome/Edge):</strong></p>
+          <p style="margin-bottom: 1rem;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+          <p style="margin-bottom: 0.5rem;"><strong>iPhone/iPad:</strong></p>
+          <p style="margin-bottom: 1rem;">Tap Share → "Add to Home Screen"</p>
+
+          <p style="margin-bottom: 0.5rem;"><strong>Android:</strong></p>
+          <p style="margin-bottom: 1rem;">Tap the menu (3 dots) → "Add to Home Screen" or "Install App"</p>
+
+          <p style="margin-top: 1rem; opacity: 0.8;"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Settings</h2>
+        <button type="button" class="btn btn--ghost" id="settings-close-btn" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <div class="form-group">
+          <label for="settings-unit" class="label">Unit Name</label>
+          <input type="text" id="settings-unit" class="input" placeholder="e.g., 1st Battalion, 5th Marines">
+        </div>
+        <div class="form-group">
+          <label for="settings-recorder" class="label">Default Recorder</label>
+          <input type="text" id="settings-recorder" class="input" placeholder="e.g., SSgt Garcia">
+        </div>
+        <div class="form-group">
+          <label class="label">Theme</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="theme" value="light" class="radio">
+              Light
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="theme" value="dark" class="radio">
+              Dark
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="theme" value="night" class="radio">
+              Night (Tactical)
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <button type="button" class="btn btn--outline btn--full" id="view-report-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            View Daily Report
+          </button>
+        </div>
+        <div class="form-group">
+          <label class="label">Data Management</label>
+          <div class="btn-group-vertical">
+            <button type="button" class="btn btn--outline btn--full" id="export-data-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Export Data (JSON)
+            </button>
+            <button type="button" class="btn btn--outline btn--full" id="import-data-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Import Data (JSON)
+            </button>
+            <input type="file" id="import-file-input" accept=".json" class="hidden">
+            <button type="button" class="btn btn--secondary btn--full" id="load-demo-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8"></polygon>
+              </svg>
+              Load Demo Data
+            </button>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <button type="button" class="btn btn--danger btn--full" id="clear-data-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Clear All Data
+          </button>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <p class="text-xs text-secondary">Keyboard: <kbd>N</kbd> New &bull; <kbd>?</kbd> Help &bull; <kbd>Esc</kbd> Close</p>
+        <button type="button" class="btn btn--primary" id="settings-save-btn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal modal--sm">
+      <div class="modal__header">
+        <h2 class="modal__title" id="confirm-title">Confirm</h2>
+      </div>
+      <div class="modal__body">
+        <p id="confirm-message">Are you sure?</p>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" id="confirm-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn--danger" id="confirm-ok-btn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div class="modal-overlay" id="help-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Keyboard Shortcuts</h2>
+        <button type="button" class="btn btn--ghost" id="help-close-btn" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <div class="shortcuts-grid">
+          <div class="shortcut"><kbd>N</kbd> <span>Add new restrictee</span></div>
+          <div class="shortcut"><kbd>R</kbd> <span>View daily report</span></div>
+          <div class="shortcut"><kbd>S</kbd> <span>Open settings</span></div>
+          <div class="shortcut"><kbd>T</kbd> <span>Toggle theme</span></div>
+          <div class="shortcut"><kbd>?</kbd> <span>Show this help</span></div>
+          <div class="shortcut"><kbd>Esc</kbd> <span>Close modal / Go back</span></div>
+        </div>
+        <hr>
+        <h3 class="text-sm font-bold mb-4">About This Tool</h3>
+        <p class="text-sm text-secondary mb-4">
+          Restriction Tracker is a free, open-source tool for tracking muster sign-ins for personnel on restriction or EPD.
+          All data stays on your device - nothing is sent to any server.
+        </p>
+        <div class="alert alert--warning">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>For UNCLASSIFIED use only. Never enter classified information.</span>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <a href="https://github.com/jeranaias/restriction-tracker" target="_blank" class="btn btn--outline">View on GitHub</a>
+        <button type="button" class="btn btn--primary" id="help-ok-btn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Modal (First Run) -->
+  <div class="modal-overlay" id="welcome-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Welcome to Restriction Tracker</h2>
+      </div>
+      <div class="modal__body">
+        <p class="mb-4">A free, mobile-friendly tool for tracking muster sign-ins for personnel on restriction or EPD punishment.</p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-icon">&#128274;</span>
+            <div>
+              <strong>100% Private</strong>
+              <p class="text-sm text-secondary">All data stays on your device. Nothing is sent to any server.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">&#128247;</span>
+            <div>
+              <strong>Works Offline</strong>
+              <p class="text-sm text-secondary">Once loaded, works without internet. Perfect for duty.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">&#128196;</span>
+            <div>
+              <strong>PDF Export</strong>
+              <p class="text-sm text-secondary">Generate print-ready daily logs and history reports.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert--info mt-4">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span><strong>Install for Offline:</strong> Tap your browser menu and select "Add to Home Screen" or "Install App"</span>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" id="welcome-demo-btn">Load Demo Data</button>
+        <button type="button" class="btn btn--primary" id="welcome-start-btn">Get Started</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer no-print">
+    <div class="container">
+      <p class="text-sm text-secondary text-center">
+        Free and open source. <a href="https://github.com/jeranaias/restriction-tracker">GitHub</a> · <a href="https://github.com/jeranaias/restriction-tracker/issues">Report Issue</a>
+      </p>
+      <p class="text-sm text-secondary text-center mt-4">
+        Part of the <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> suite.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts (bundled locally for offline support) -->
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="js/lib/storage.js"></script>
+  <script src="js/lib/date-utils.js"></script>
+  <script src="js/lib/theme.js"></script>
+  <script src="js/roster.js"></script>
+  <script src="js/muster.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>

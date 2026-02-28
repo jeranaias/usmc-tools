@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="NAVMC 11622 PFT/CFT Performance Worksheet Generator - Auto-calculate scores and generate official forms">
+  <title>NAVMC 11622 Generator - PFT/CFT Proctor</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B0000">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Live Preview Pane -->
+  <div id="livePreviewPane" class="live-preview-pane">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button type="button" class="preview-close" onclick="App.togglePreview()" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="preview-loading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating preview...</span>
+    </div>
+    <iframe id="preview-frame" class="preview-frame" title="PDF Preview"></iframe>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container" id="mainContainer">
+    <!-- Header -->
+    <header class="no-print">
+      <div class="header-controls">
+        <button id="theme-toggle" type="button" class="header-btn" onclick="App.toggleTheme()" title="Toggle theme">
+          <span id="themeIcon">&#9790;</span>
+        </button>
+      </div>
+      <h1>PFT/CFT PROCTOR</h1>
+      <p class="subtitle">MCO 6100.13A Compliant · NAVMC 11622 Generator</p>
+      <p class="tagline">Free tool for Marines · <a href="#install-guide" class="tagline-link">Offline Guide</a></p>
+    </header>
+
+    <main id="main">
+
+      <!-- Test Type Selection (Pill Buttons like OSMEAC) -->
+      <div class="test-type-tabs">
+        <button type="button" class="test-tab test-tab--active" id="select-pft" onclick="App.selectTestType('pft')">PFT</button>
+        <button type="button" class="test-tab" id="select-cft" onclick="App.selectTestType('cft')">CFT</button>
+      </div>
+
+      <!-- Session Info -->
+      <div class="session-header">
+        <div class="session-header__title">Session Information</div>
+        <div class="session-header__helper">Set up your PT session details</div>
+        <div class="session-header__grid">
+          <div class="form-group m-0">
+            <label class="label" for="session-unit">Unit</label>
+            <input type="text" id="session-unit" class="input" placeholder="1/1 H&S Co">
+          </div>
+          <div class="form-group m-0">
+            <label class="label" for="session-date">Date</label>
+            <input type="date" id="session-date" class="input">
+          </div>
+          <div class="form-group m-0">
+            <label class="label" for="session-monitor">Monitor</label>
+            <input type="text" id="session-monitor" class="input" placeholder="SSgt Smith">
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Toolbar -->
+      <div class="quick-toolbar">
+        <button type="button" id="preview-toggle" class="btn btn-preview" onclick="App.togglePreview()" title="Ctrl+L">
+          Live Preview
+        </button>
+        <button type="button" class="btn btn-toolbar-secondary" onclick="App.clearForm()">
+          Clear Form
+        </button>
+      </div>
+
+      <!-- Marine Entry Section -->
+      <div class="section" id="marine-section">
+        <div class="section__header" onclick="App.toggleSection('marine-section')">
+          <div class="section__title">Add Marine <span class="section__helper">Enter individual Marine data</span></div>
+          <div class="section__toggle">▾</div>
+        </div>
+        <div class="section__body">
+          <form id="marine-form">
+            <!-- Basic Info -->
+            <div class="marine-grid mb-4">
+              <div class="form-group m-0">
+                <label class="label" for="marine-rank">Rank</label>
+                <select id="marine-rank" class="input select">
+                  <option value="Pvt">Pvt</option>
+                  <option value="PFC">PFC</option>
+                  <option value="LCpl" selected>LCpl</option>
+                  <option value="Cpl">Cpl</option>
+                  <option value="Sgt">Sgt</option>
+                  <option value="SSgt">SSgt</option>
+                  <option value="GySgt">GySgt</option>
+                  <option value="MSgt">MSgt</option>
+                  <option value="1stSgt">1stSgt</option>
+                  <option value="MGySgt">MGySgt</option>
+                  <option value="SgtMaj">SgtMaj</option>
+                  <option value="2ndLt">2ndLt</option>
+                  <option value="1stLt">1stLt</option>
+                  <option value="Capt">Capt</option>
+                  <option value="Maj">Maj</option>
+                  <option value="LtCol">LtCol</option>
+                  <option value="Col">Col</option>
+                </select>
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-lastname">Last Name</label>
+                <input type="text" id="marine-lastname" class="input" placeholder="Smith" autocomplete="off">
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-firstname">First Name</label>
+                <input type="text" id="marine-firstname" class="input" placeholder="John" autocomplete="off">
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-mi">MI</label>
+                <input type="text" id="marine-mi" class="input" maxlength="1" placeholder="A" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="marine-grid mb-4">
+              <div class="form-group m-0">
+                <label class="label" for="marine-edipi">EDIPI</label>
+                <input type="text" id="marine-edipi" class="input" placeholder="1234567890" maxlength="10" inputmode="numeric">
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-dob">DOB</label>
+                <input type="date" id="marine-dob" class="input">
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-gender">Gender</label>
+                <select id="marine-gender" class="input select">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="form-group m-0">
+                <label class="label">Age</label>
+                <input type="text" id="marine-age" class="input" readonly placeholder="--">
+              </div>
+            </div>
+
+            <div class="marine-grid--3 marine-grid mb-4">
+              <div class="form-group m-0">
+                <label class="label" for="marine-height">Height (in)</label>
+                <input type="number" id="marine-height" class="input" placeholder="70" min="58" max="80" inputmode="numeric">
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-weight">Weight (lbs)</label>
+                <input type="number" id="marine-weight" class="input" placeholder="180" min="80" max="350" inputmode="numeric">
+              </div>
+              <div class="form-group m-0">
+                <label class="label" for="marine-pha">PHA Date</label>
+                <input type="date" id="marine-pha" class="input">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- PFT Section -->
+      <div class="section" id="pft-section">
+        <div class="section__header" onclick="App.toggleSection('pft-section')">
+          <div class="section__title">PFT Events <span class="section__helper">Record performance for each event</span></div>
+          <div class="section__score" id="pft-header-score">0 pts</div>
+          <div class="section__toggle">▾</div>
+        </div>
+        <div class="section__body">
+          <!-- Upper Body Toggle -->
+          <div class="toggle-group mb-3">
+            <button type="button" class="toggle-btn toggle-btn--active" id="btn-pullups" onclick="App.setUpperEvent('pullups')">Pull-ups (100)</button>
+            <button type="button" class="toggle-btn" id="btn-pushups" onclick="App.setUpperEvent('pushups')">Push-ups (70)</button>
+          </div>
+
+          <!-- Pull-ups -->
+          <div class="event-input" id="pullups-event">
+            <div class="event-input__header">
+              <span class="event-input__label">Pull-ups</span>
+              <span class="event-input__score" id="pullups-score">0 pts</span>
+            </div>
+            <div class="count-input">
+              <button type="button" class="count-input__btn" onclick="App.adjustCount('pullups', -1)">−</button>
+              <input type="number" id="marine-pullups" class="input count-input__value" value="0" min="0" max="50" inputmode="numeric">
+              <button type="button" class="count-input__btn" onclick="App.adjustCount('pullups', 1)">+</button>
+            </div>
+          </div>
+
+          <!-- Push-ups -->
+          <div class="event-input hidden" id="pushups-event">
+            <div class="event-input__header">
+              <span class="event-input__label">Push-ups (2 min)</span>
+              <span class="event-input__score" id="pushups-score">0 pts</span>
+            </div>
+            <div class="count-input">
+              <button type="button" class="count-input__btn" onclick="App.adjustCount('pushups', -1)">−</button>
+              <input type="number" id="marine-pushups" class="input count-input__value" value="0" min="0" max="150" inputmode="numeric">
+              <button type="button" class="count-input__btn" onclick="App.adjustCount('pushups', 1)">+</button>
+            </div>
+          </div>
+
+          <!-- Plank -->
+          <div class="event-input">
+            <div class="event-input__header">
+              <span class="event-input__label">Plank</span>
+              <span class="event-input__score" id="plank-score">0 pts</span>
+            </div>
+            <div class="time-group">
+              <input type="number" id="marine-plank-min" class="input time-group__input" value="0" min="0" max="5" inputmode="numeric">
+              <span class="time-group__separator">:</span>
+              <input type="number" id="marine-plank-sec" class="input time-group__input" value="00" min="0" max="59" inputmode="numeric">
+            </div>
+          </div>
+
+          <!-- Cardio Toggle -->
+          <div class="toggle-group mb-3">
+            <button type="button" class="toggle-btn toggle-btn--active" id="btn-run" onclick="App.setCardioEvent('run')">3-Mile Run</button>
+            <button type="button" class="toggle-btn" id="btn-row" onclick="App.setCardioEvent('row')">5K Row</button>
+          </div>
+
+          <!-- Run -->
+          <div class="event-input" id="run-event">
+            <div class="event-input__header">
+              <span class="event-input__label">3-Mile Run</span>
+              <span class="event-input__score" id="run-score">0 pts</span>
+            </div>
+            <div class="time-group">
+              <input type="number" id="marine-run-min" class="input time-group__input" value="0" min="0" max="45" inputmode="numeric">
+              <span class="time-group__separator">:</span>
+              <input type="number" id="marine-run-sec" class="input time-group__input" value="00" min="0" max="59" inputmode="numeric">
+            </div>
+          </div>
+
+          <!-- Row -->
+          <div class="event-input hidden" id="row-event">
+            <div class="event-input__header">
+              <span class="event-input__label">5K Row (46+ / waiver)</span>
+              <span class="event-input__score" id="row-score">0 pts</span>
+            </div>
+            <div class="time-group">
+              <input type="number" id="marine-row-min" class="input time-group__input" value="0" min="0" max="45" inputmode="numeric">
+              <span class="time-group__separator">:</span>
+              <input type="number" id="marine-row-sec" class="input time-group__input" value="00" min="0" max="59" inputmode="numeric">
+            </div>
+          </div>
+
+          <!-- Altitude -->
+          <label class="check-toggle mt-3">
+            <input type="checkbox" id="marine-altitude">
+            <span>High Altitude (4,500ft+)</span>
+          </label>
+
+          <!-- PFT Total -->
+          <div class="score-total">
+            <div class="score-total__value" id="pft-total">0</div>
+            <div class="score-total__label">PFT Score</div>
+            <div class="score-total__class" id="pft-class">Enter scores above</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CFT Section -->
+      <div class="section" id="cft-section">
+        <div class="section__header" onclick="App.toggleSection('cft-section')">
+          <div class="section__title">CFT Events <span class="section__helper">Combat fitness performance</span></div>
+          <div class="section__score" id="cft-header-score">0 pts</div>
+          <div class="section__toggle">▾</div>
+        </div>
+        <div class="section__body">
+          <!-- MTC -->
+          <div class="event-input">
+            <div class="event-input__header">
+              <span class="event-input__label">Movement to Contact (880 yds)</span>
+              <span class="event-input__score" id="mtc-score">0 pts</span>
+            </div>
+            <div class="time-group">
+              <input type="number" id="marine-mtc-min" class="input time-group__input" value="0" min="0" max="10" inputmode="numeric">
+              <span class="time-group__separator">:</span>
+              <input type="number" id="marine-mtc-sec" class="input time-group__input" value="00" min="0" max="59" inputmode="numeric">
+            </div>
+          </div>
+
+          <!-- Ammo Lift -->
+          <div class="event-input">
+            <div class="event-input__header">
+              <span class="event-input__label">Ammo Lift (30lb, 2 min)</span>
+              <span class="event-input__score" id="al-score">0 pts</span>
+            </div>
+            <div class="count-input">
+              <button type="button" class="count-input__btn" onclick="App.adjustCount('al', -1)">−</button>
+              <input type="number" id="marine-al" class="input count-input__value" value="0" min="0" max="200" inputmode="numeric">
+              <button type="button" class="count-input__btn" onclick="App.adjustCount('al', 1)">+</button>
+            </div>
+          </div>
+
+          <!-- MANUF -->
+          <div class="event-input">
+            <div class="event-input__header">
+              <span class="event-input__label">Maneuver Under Fire (300 yds)</span>
+              <span class="event-input__score" id="manuf-score">0 pts</span>
+            </div>
+            <div class="time-group">
+              <input type="number" id="marine-manuf-min" class="input time-group__input" value="0" min="0" max="10" inputmode="numeric">
+              <span class="time-group__separator">:</span>
+              <input type="number" id="marine-manuf-sec" class="input time-group__input" value="00" min="0" max="59" inputmode="numeric">
+            </div>
+          </div>
+
+          <!-- Altitude -->
+          <label class="check-toggle mt-3">
+            <input type="checkbox" id="marine-cft-altitude">
+            <span>High Altitude (4,500ft+)</span>
+          </label>
+
+          <!-- CFT Total -->
+          <div class="score-total score-total--cft">
+            <div class="score-total__value" id="cft-total">0</div>
+            <div class="score-total__label">CFT Score</div>
+            <div class="score-total__class" id="cft-class">Enter scores above</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add to Worksheet Button -->
+      <div class="flex gap-3 mb-4">
+        <button type="button" class="btn btn--primary btn--lg btn--full" onclick="App.addMarineToWorksheet()">
+          Add Marine to Worksheet
+        </button>
+      </div>
+
+      <!-- Worksheet Section -->
+      <div class="section" id="worksheet-section">
+        <div class="section__header" onclick="App.toggleSection('worksheet-section')">
+          <div class="section__title">
+            Worksheet
+            <span class="badge badge--primary" id="marine-count-badge" style="margin-left: 8px;">0</span>
+            <span class="section__helper">Marines ready for PDF export</span>
+          </div>
+          <div class="section__toggle">▾</div>
+        </div>
+        <div class="section__body" style="padding: 0;">
+          <div id="marines-list">
+            <div class="empty-state">
+              <div class="empty-state__icon">📋</div>
+              <div class="empty-state__text">No Marines added yet</div>
+              <button type="button" class="btn btn--outline btn--sm mt-3" onclick="App.loadExample()">
+                Load Example Roster
+              </button>
+            </div>
+          </div>
+          <div class="action-bar" id="worksheet-actions" style="display: none;">
+            <button type="button" class="btn btn--primary btn--lg" onclick="App.generateNAVMC()" title="Ctrl+D">
+              Download PDF
+            </button>
+            <button type="button" class="btn btn--secondary" onclick="App.previewNAVMC()">
+              Preview
+            </button>
+            <button type="button" class="btn btn--outline" onclick="App.clearAllMarines()">
+              Clear All
+            </button>
+          </div>
+          <div class="action-bar" id="example-action" style="display: flex; justify-content: center; padding: var(--space-3); border-top: 1px solid var(--border-light);">
+            <button type="button" class="btn btn--ghost btn--sm" onclick="App.loadExample()">
+              Load Example Roster
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard Shortcuts Help -->
+      <details class="collapsible-section mb-4 no-print">
+        <summary class="collapsible-section__header">
+          KEYBOARD SHORTCUTS
+        </summary>
+        <div class="collapsible-section__body">
+          <div class="text-sm text-secondary">
+            <p><kbd>Ctrl+D</kbd> Download PDF</p>
+            <p><kbd>Ctrl+P</kbd> Print PDF</p>
+            <p><kbd>Ctrl+S</kbd> Export session</p>
+            <p><kbd>Ctrl+L</kbd> Toggle live preview</p>
+            <p><kbd>Escape</kbd> Close preview/modal</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- Install App / Offline Guide -->
+      <details class="collapsible-section mb-4 no-print" id="install-guide">
+        <summary class="collapsible-section__header">
+          INSTALL FOR OFFLINE USE
+        </summary>
+        <div class="collapsible-section__body">
+          <div class="text-sm text-secondary">
+            <p style="margin-bottom: 1rem;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+            <!-- Install Button (shown when PWA install is available) -->
+            <button type="button" id="pwa-install-btn" class="btn btn--primary btn--sm mb-4" style="display: none;" onclick="App.installPWA()">
+              Install App
+            </button>
+
+            <p style="margin-bottom: 0.5rem;"><strong>Desktop (Chrome/Edge):</strong></p>
+            <p style="margin-bottom: 1rem;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+            <p style="margin-bottom: 0.5rem;"><strong>iPhone/iPad:</strong></p>
+            <p style="margin-bottom: 1rem;">Tap Share → "Add to Home Screen"</p>
+
+            <p style="margin-bottom: 0.5rem;"><strong>Android:</strong></p>
+            <p style="margin-bottom: 1rem;">Tap the menu (3 dots) → "Add to Home Screen" or "Install App"</p>
+
+            <p style="margin-top: 1rem; opacity: 0.8;"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+          </div>
+        </div>
+      </details>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer no-print">
+      <p class="footer__suite">
+        Part of <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a>
+      </p>
+      <p class="footer__links">
+        <a href="https://github.com/jeranaias/pft-cft-proctor">GitHub</a> · <a href="https://github.com/jeranaias/pft-cft-proctor/issues">Report Issue</a> · MCO 6100.13A w/CH-4 · v2.0
+      </p>
+    </footer>
+  </div>
+
+  <!-- Preview Modal (Mobile) -->
+  <div id="preview-modal" class="preview-modal hidden no-print">
+    <div class="preview-modal__content">
+      <div class="preview-modal__header">
+        <span class="font-bold">NAVMC 11622 Preview</span>
+        <button class="btn btn--ghost btn--sm" onclick="App.closePreview()">Close</button>
+      </div>
+      <div id="preview-content" class="preview-modal__body"></div>
+    </div>
+  </div>
+
+  <!-- Scripts (order matters) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/scoring-tables.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/bodyfat.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/navmc-generator.js"></script>
+  <!-- Modular architecture -->
+  <script src="js/utils.js"></script>
+  <script src="js/scoring-calculator.js"></script>
+  <script src="js/session-manager.js"></script>
+  <script src="js/form-handler.js"></script>
+  <script src="js/preview-manager.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

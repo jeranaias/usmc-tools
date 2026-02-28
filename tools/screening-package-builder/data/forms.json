@@ -1,0 +1,168 @@
+{
+  "forms": {
+    "DD_2807_1": {
+      "name": "DD Form 2807-1",
+      "title": "Report of Medical History",
+      "description": "Documents medical history for commissioning physical. All blocks must be completed honestly and thoroughly.",
+      "downloadUrl": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd2807-1.pdf",
+      "alternateUrl": "https://www.netc.navy.mil/Portals/46/NSTC/STA-21/docs/dd2807-1-(10-18).pdf",
+      "instructions": [
+        "Complete all blocks - do not leave any blank",
+        "Answer all medical history questions truthfully",
+        "List all surgeries, hospitalizations, and medical conditions",
+        "Include dates and outcomes for all medical events",
+        "Sign and date the form"
+      ],
+      "tips": [
+        "Review your medical records before completing",
+        "Disclose everything - hidden conditions can disqualify you later",
+        "Get copies of records for any conditions you disclose"
+      ],
+      "lastRevised": "2018-10",
+      "authority": "DoDI 6130.03"
+    },
+    "DD_2808": {
+      "name": "DD Form 2808",
+      "title": "Report of Medical Examination",
+      "description": "Commissioning physical examination. Must be completed by a military physician or authorized provider.",
+      "downloadUrl": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd2808.pdf",
+      "alternateUrl": "https://www.mcesg.marines.mil/Portals/9/RAST%20Documents/Phase3_WS/4.%20DD%20Form%202808%20(1).pdf",
+      "instructions": [
+        "Schedule physical through your medical department",
+        "Bring completed DD 2807-1 to appointment",
+        "Fasting may be required - confirm with medical",
+        "Bring glasses/contacts and prescription",
+        "Audiogram must be within 3 years"
+      ],
+      "tips": [
+        "Schedule 60+ days before deadline - waivers take time",
+        "Physical is valid for 24 months",
+        "Keep copies of all medical documentation"
+      ],
+      "lastRevised": "2019-07",
+      "authority": "DoDI 6130.03"
+    },
+    "DD_93": {
+      "name": "DD Form 93",
+      "title": "Record of Emergency Data",
+      "description": "Documents emergency contacts and beneficiary designations. Must be current.",
+      "downloadUrl": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd0093.pdf",
+      "instructions": [
+        "Verify all information is current",
+        "Update beneficiary designations as needed",
+        "Ensure emergency contacts are accurate",
+        "Submit updates through unit S-1"
+      ],
+      "tips": [
+        "Review annually and after major life events",
+        "Keep personal copy of completed form"
+      ],
+      "lastRevised": "2023-02",
+      "authority": "DoDI 1300.18"
+    },
+    "NAVMC_10274": {
+      "name": "NAVMC 10274",
+      "title": "Administrative Action Form",
+      "description": "Standard format for administrative requests including program applications. Used for WO application letter.",
+      "downloadUrl": "https://www.marines.mil/News/Publications/MCPEL/",
+      "instructions": [
+        "Use current version (check MCPEL)",
+        "Follow SECNAV M-5216.5 formatting",
+        "Include SSIC appropriate to request type",
+        "Route through chain of command",
+        "Keep copies at each endorsement level"
+      ],
+      "format": {
+        "font": "12pt Times New Roman or Courier",
+        "margins": "1 inch all sides",
+        "spacing": "Single-spaced, double between paragraphs",
+        "ssic": "1040 (Officer programs)"
+      },
+      "lastRevised": "2020-07",
+      "authority": "SECNAV M-5216.5"
+    },
+    "NAVMC_11580": {
+      "name": "NAVMC 11580",
+      "title": "Command Screening Checklist",
+      "description": "Documents command screening and duty status for special programs and schools.",
+      "downloadUrl": "https://www.usmcu.edu/Portals/218/CEME/Documents/Information/CEME%20Command%20Screening%20Checklist%20and%20Duty%20Status%20Waiver.pdf",
+      "alternateUrl": "https://www.usmcu.edu/Portals/218/CEME/Documents/Information/Command%20Screening%20Form%20and%20Duty%20Status%20Waiver_Oct%202018_Fillable.pdf",
+      "instructions": [
+        "Complete all sections applicable to your program",
+        "Obtain CO signature and endorsement",
+        "Include duty status waiver if not on full duty",
+        "Submit 5 working days before deadline if waiver needed"
+      ],
+      "lastRevised": "2024-10",
+      "authority": "MCO 1326.6"
+    },
+    "SGLV_8286": {
+      "name": "SGLV 8286",
+      "title": "SGLI Election and Certificate",
+      "description": "Servicemembers' Group Life Insurance election form. Note: Most elections now done via SOES.",
+      "downloadUrl": "https://www.benefits.va.gov/insurance/forms/SGLV-8286.pdf",
+      "onlineSystem": "https://milconnect.dmdc.osd.mil/milconnect/",
+      "instructions": [
+        "Access SOES via milConnect for most changes",
+        "Paper form only for part-time coverage members",
+        "Review beneficiary designations",
+        "Submit changes through personnel office"
+      ],
+      "tips": [
+        "SOES is the official system of record",
+        "Paper form for special circumstances only"
+      ],
+      "lastRevised": "2025-02",
+      "authority": "38 U.S.C. Chapter 19"
+    },
+    "SF_86": {
+      "name": "SF 86",
+      "title": "Questionnaire for National Security Positions",
+      "description": "Security clearance investigation questionnaire. Completed via e-QIP system.",
+      "onlineSystem": "https://www.opm.gov/investigations/e-qip-application/",
+      "instructions": [
+        "Complete via e-QIP when initiated by FSO",
+        "Gather 10 years of addresses and employment",
+        "List all foreign contacts and travel",
+        "Be thorough and accurate - errors cause delays"
+      ],
+      "tips": [
+        "Start gathering information early",
+        "Foreign contacts are common - disclose them",
+        "Investigations take 3-12 months"
+      ],
+      "authority": "EO 12968, 50 U.S.C. 3341"
+    }
+  },
+  "systemLinks": {
+    "MOL": {
+      "name": "Marine Online (MOL)",
+      "url": "https://mol.tfs.usmc.mil/",
+      "description": "Access BIR/BTR, IMR, official records",
+      "prints": ["BIR Screen", "BTR Screen", "IMR Screen", "Awards"]
+    },
+    "MCTFS": {
+      "name": "Marine Corps Total Force System",
+      "url": "https://tfs.usmc.mil/",
+      "description": "Official service record system",
+      "prints": ["Education Screen", "Awards Screen", "Chronological Page", "Test Scores"]
+    },
+    "JPAS_DISS": {
+      "name": "DISS (formerly JPAS)",
+      "url": "https://www.dcsa.mil/is/diss/",
+      "description": "Security clearance verification",
+      "prints": ["Clearance Eligibility", "Investigation Status"]
+    },
+    "DEERS": {
+      "name": "DEERS/milConnect",
+      "url": "https://milconnect.dmdc.osd.mil/",
+      "description": "Dependent and beneficiary information",
+      "prints": ["Dependent Verification", "SGLI/SOES"]
+    },
+    "MCRC": {
+      "name": "MCRC Warrant Officer Page",
+      "url": "https://www.mcrc.marines.mil/Officer-Programs/Warrant-Officer/",
+      "description": "Official WO program information and sample applications"
+    }
+  }
+}

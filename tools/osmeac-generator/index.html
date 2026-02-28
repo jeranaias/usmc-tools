@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSMEAC Generator | 5-Paragraph Order Builder | USMC Tools</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Free online OSMEAC 5-Paragraph Order Generator for USMC tactical leaders. Build squad attack orders with proper military formatting. Offline-capable PWA with tactical night mode.">
+  <meta name="keywords" content="OSMEAC, 5 paragraph order, USMC, Marine Corps, squad attack order, tactical order, combat order, military planning, fire team, SMEAC, patrol order, operations order, OPORD, warning order, fragmentary order">
+  <meta name="author" content="USMC Tools">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="OSMEAC Generator | 5-Paragraph Order Builder">
+  <meta property="og:description" content="Free tool for building 5-paragraph orders with proper USMC formatting.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B0000">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="OSMEAC">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Live Preview Pane (Sliding) -->
+  <div id="livePreviewPane" class="live-preview-pane">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button type="button" id="previewClose" class="preview-close" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="previewLoading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating preview...</span>
+    </div>
+    <div id="previewContent" class="preview-content">
+      <div id="order-document" class="order-document"></div>
+    </div>
+  </div>
+
+  <div class="container" id="mainContainer">
+    <!-- Header -->
+    <header>
+      <div class="header-actions">
+        <button type="button" id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme (Light/Dark/Night)">
+          <span class="theme-icon" aria-hidden="true">&#9788;</span>
+        </button>
+      </div>
+      <h1>OSMEAC GENERATOR</h1>
+      <p class="subtitle">5-Paragraph Order Builder</p>
+    </header>
+
+    <!-- Tagline Bar -->
+    <div class="tagline-bar no-print">
+      Free tool for Marines &bull; <a href="https://github.com/jeranaias/osmeac-generator#readme" target="_blank">Documentation &amp; Guide &rarr;</a>
+    </div>
+
+    <main id="main">
+      <!-- Navigation & Quick Actions -->
+      <div class="form-section">
+        <h2 class="section-title">Order Sections</h2>
+        <div class="section-tabs">
+          <button class="section-tab active" data-section="orientation">O</button>
+          <button class="section-tab" data-section="situation">S</button>
+          <button class="section-tab" data-section="mission">M</button>
+          <button class="section-tab" data-section="execution">E</button>
+          <button class="section-tab" data-section="admin">A</button>
+          <button class="section-tab" data-section="command">C</button>
+        </div>
+        <div class="quick-toolbar">
+          <button type="button" id="previewToggle" class="btn btn--preview" aria-pressed="false">Live Preview</button>
+          <button type="button" id="load-example-btn" class="btn btn-secondary">Load Example</button>
+          <button type="button" id="menu-toggle" class="btn btn-outline">Menu &#9662;</button>
+        </div>
+        <div id="menu-dropdown" class="menu-dropdown hidden">
+          <button id="new-order-btn" class="menu-item">New Order</button>
+          <button id="load-order-btn" class="menu-item">Load Saved Order</button>
+          <button id="save-order-btn" class="menu-item">Save Order</button>
+          <hr class="menu-divider">
+          <button id="share-qr-btn" class="menu-item">Share via QR Code</button>
+          <button id="copy-order-btn" class="menu-item">Copy to Clipboard</button>
+          <button id="export-btn" class="menu-item">Export to Text File</button>
+          <button id="print-btn" class="menu-item">Print Order</button>
+        </div>
+      </div>
+
+      <!-- ORIENTATION Section -->
+      <div id="form-orientation" class="section-form active">
+        <div class="form-section">
+          <h2 class="section-title">Orientation</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Orient your unit to the terrain and situation.</p>
+
+          <div class="form-group">
+            <label class="label" for="present-location">Present Location (8-digit grid)</label>
+            <input type="text" id="present-location" class="input" placeholder="e.g., 12345678" maxlength="8">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label" for="direction-azimuth">Azimuth (degrees)</label>
+              <input type="number" id="direction-azimuth" class="input" placeholder="0-360" min="0" max="360">
+            </div>
+            <div class="form-group">
+              <label class="label" for="direction-distance">Distance (meters)</label>
+              <input type="number" id="direction-distance" class="input" placeholder="meters" min="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="objective-location">Objective Location (8-digit grid)</label>
+            <input type="text" id="objective-location" class="input" placeholder="e.g., 87654321" maxlength="8">
+          </div>
+
+          <fieldset class="fieldset">
+            <legend class="legend">KOCOA - Terrain Analysis</legend>
+
+            <div class="form-group">
+              <label class="label" for="kocoa-key-terrain">Key Terrain</label>
+              <textarea id="kocoa-key-terrain" class="input textarea" rows="2" placeholder="Terrain providing marked advantage..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="kocoa-observation">Observation & Fields of Fire</label>
+              <textarea id="kocoa-observation" class="input textarea" rows="2" placeholder="Areas with good observation..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="kocoa-cover">Cover & Concealment</label>
+              <textarea id="kocoa-cover" class="input textarea" rows="2" placeholder="Available cover and concealment..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="kocoa-obstacles">Obstacles</label>
+              <textarea id="kocoa-obstacles" class="input textarea" rows="2" placeholder="Natural and man-made obstacles..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="kocoa-avenues">Avenues of Approach</label>
+              <textarea id="kocoa-avenues" class="input textarea" rows="2" placeholder="Routes for movement..."></textarea>
+            </div>
+          </fieldset>
+
+          <div class="form-group">
+            <label class="label" for="weather">Weather Conditions</label>
+            <textarea id="weather" class="input textarea" rows="2" placeholder="Current and forecasted weather..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SITUATION Section -->
+      <div id="form-situation" class="section-form">
+        <div class="form-section">
+          <h2 class="section-title">Situation</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Describe enemy and friendly forces.</p>
+
+          <fieldset class="fieldset">
+            <legend class="legend">SALUTE - Enemy Forces</legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="salute-size">Size</label>
+                <input type="text" id="salute-size" class="input" placeholder="e.g., Squad, 8-10 pax">
+              </div>
+              <div class="form-group">
+                <label class="label" for="salute-activity">Activity</label>
+                <input type="text" id="salute-activity" class="input" placeholder="e.g., Patrolling">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="salute-location">Location</label>
+              <input type="text" id="salute-location" class="input" placeholder="8-digit grid or description">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="salute-unit">Unit/Uniform</label>
+                <input type="text" id="salute-unit" class="input" placeholder="e.g., Woodland camo">
+              </div>
+              <div class="form-group">
+                <label class="label" for="salute-time">Time Observed</label>
+                <input type="text" id="salute-time" class="input" placeholder="e.g., 0630L">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="salute-equipment">Equipment</label>
+              <input type="text" id="salute-equipment" class="input" placeholder="e.g., Small arms, 1x technical">
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">DRAW-D - Enemy Capabilities</legend>
+
+            <div class="form-group">
+              <label class="label" for="drawd-defend">Defend</label>
+              <textarea id="drawd-defend" class="input textarea" rows="2" placeholder="Enemy's defensive capability..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="drawd-reinforce">Reinforce</label>
+              <textarea id="drawd-reinforce" class="input textarea" rows="2" placeholder="Enemy's reinforcement capability..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="drawd-attack">Attack</label>
+              <textarea id="drawd-attack" class="input textarea" rows="2" placeholder="Enemy's offensive capability..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="drawd-withdraw">Withdraw</label>
+              <textarea id="drawd-withdraw" class="input textarea" rows="2" placeholder="Enemy's withdrawal capability..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="drawd-delay">Delay</label>
+              <textarea id="drawd-delay" class="input textarea" rows="2" placeholder="Enemy's delaying capability..."></textarea>
+            </div>
+          </fieldset>
+
+          <div class="form-group">
+            <label class="label" for="emlcoa">EMLCOA (Most Likely COA)</label>
+            <textarea id="emlcoa" class="input textarea" rows="2" placeholder="What the enemy is most likely to do..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="emdcoa">EMDCOA (Most Dangerous COA)</label>
+            <textarea id="emdcoa" class="input textarea" rows="2" placeholder="Most dangerous enemy action..."></textarea>
+          </div>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Friendly Forces</legend>
+
+            <div class="form-group">
+              <label class="label" for="higher-mission">Higher's Mission</label>
+              <textarea id="higher-mission" class="input textarea" rows="2" placeholder="Higher HQ mission..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="higher-intent">Higher's Intent</label>
+              <textarea id="higher-intent" class="input textarea" rows="2" placeholder="Commander's intent from higher..."></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="adjacent-north">Adjacent - North</label>
+                <input type="text" id="adjacent-north" class="input" placeholder="Unit & mission">
+              </div>
+              <div class="form-group">
+                <label class="label" for="adjacent-south">Adjacent - South</label>
+                <input type="text" id="adjacent-south" class="input" placeholder="Unit & mission">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="adjacent-east">Adjacent - East</label>
+                <input type="text" id="adjacent-east" class="input" placeholder="Unit & mission">
+              </div>
+              <div class="form-group">
+                <label class="label" for="adjacent-west">Adjacent - West</label>
+                <input type="text" id="adjacent-west" class="input" placeholder="Unit & mission">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="supporting-units">Supporting Units</label>
+              <textarea id="supporting-units" class="input textarea" rows="2" placeholder="Units providing support..."></textarea>
+            </div>
+          </fieldset>
+
+          <div class="form-group">
+            <label class="label" for="attachments">Attachments/Detachments</label>
+            <textarea id="attachments" class="input textarea" rows="2" placeholder="Units attached or detached..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISSION Section -->
+      <div id="form-mission" class="section-form">
+        <div class="form-section">
+          <h2 class="section-title">Mission</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Build your mission statement using the 5 W's.</p>
+
+          <div class="form-group">
+            <label class="label" for="mission-who">WHO (Unit)</label>
+            <input type="text" id="mission-who" class="input" placeholder="e.g., 1st Squad">
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="mission-what">WHAT (Tactical Task)</label>
+            <select id="mission-what" class="input select">
+              <option value="">Select a tactical task...</option>
+              <optgroup label="Offensive Tasks">
+                <option value="attacks to seize">attacks to seize</option>
+                <option value="attacks to destroy">attacks to destroy</option>
+                <option value="attacks to neutralize">attacks to neutralize</option>
+                <option value="attacks to secure">attacks to secure</option>
+                <option value="attacks to clear">attacks to clear</option>
+                <option value="conducts a raid on">conducts a raid on</option>
+                <option value="conducts an ambush at">conducts an ambush at</option>
+                <option value="infiltrates to">infiltrates to</option>
+                <option value="breaches">breaches</option>
+                <option value="bypasses">bypasses</option>
+                <option value="envelops">envelops</option>
+                <option value="penetrates">penetrates</option>
+              </optgroup>
+              <optgroup label="Defensive Tasks">
+                <option value="defends">defends</option>
+                <option value="delays">delays</option>
+                <option value="withdraws to">withdraws to</option>
+                <option value="blocks">blocks</option>
+                <option value="contains">contains</option>
+                <option value="disrupts">disrupts</option>
+              </optgroup>
+              <optgroup label="Security Tasks">
+                <option value="screens">screens</option>
+                <option value="guards">guards</option>
+                <option value="covers">covers</option>
+                <option value="conducts area security of">conducts area security of</option>
+              </optgroup>
+              <optgroup label="Other Tasks">
+                <option value="reconnoiters">reconnoiters</option>
+                <option value="occupies">occupies</option>
+                <option value="secures">secures</option>
+                <option value="seizes">seizes</option>
+                <option value="holds">holds</option>
+                <option value="supports by fire">supports by fire</option>
+                <option value="provides overwatch of">provides overwatch of</option>
+                <option value="establishes a blocking position at">establishes a blocking position at</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="mission-what-custom">Or Custom Task</label>
+            <input type="text" id="mission-what-custom" class="input" placeholder="Enter custom tactical task...">
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="mission-where">WHERE (Location)</label>
+            <input type="text" id="mission-where" class="input" placeholder="e.g., Building 4 at grid 12345678">
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="mission-when">WHEN (Time)</label>
+            <input type="text" id="mission-when" class="input" placeholder="e.g., NLT 0600">
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="mission-why">WHY (Purpose)</label>
+            <textarea id="mission-why" class="input textarea" rows="3" placeholder="e.g., establish a support-by-fire position for the platoon's main assault"></textarea>
+            <p class="help-text">"IOT" (In Order To) will be added automatically</p>
+          </div>
+
+          <div class="mission-preview-box">
+            <h3>Generated Mission Statement:</h3>
+            <p id="mission-statement-inline" class="mission-statement-text">
+              Complete the fields above to generate your mission statement.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXECUTION Section -->
+      <div id="form-execution" class="section-form">
+        <div class="form-section">
+          <h2 class="section-title">Execution</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Detail how you will accomplish the mission.</p>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Commander's Intent</legend>
+
+            <div class="form-group">
+              <label class="label" for="intent-purpose">Purpose</label>
+              <textarea id="intent-purpose" class="input textarea" rows="2" placeholder="The 'why' behind this mission..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="intent-method">Method</label>
+              <textarea id="intent-method" class="input textarea" rows="2" placeholder="General approach..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="intent-endstate-friendly">End State - Friendly</label>
+              <textarea id="intent-endstate-friendly" class="input textarea" rows="2" placeholder="Desired state of friendly forces..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="intent-endstate-enemy">End State - Enemy</label>
+              <textarea id="intent-endstate-enemy" class="input textarea" rows="2" placeholder="Desired state of enemy forces..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="intent-endstate-terrain">End State - Terrain</label>
+              <textarea id="intent-endstate-terrain" class="input textarea" rows="2" placeholder="Desired state of terrain..."></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Concept of Operations</legend>
+
+            <div class="form-group">
+              <label class="label" for="scheme-maneuver">Scheme of Maneuver</label>
+              <textarea id="scheme-maneuver" class="input textarea" rows="3" placeholder="How you will maneuver..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="fire-support">Fire Support Plan</label>
+              <textarea id="fire-support" class="input textarea" rows="2" placeholder="Supporting fires..."></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Tasks to Subordinate Units</legend>
+
+            <div class="form-group">
+              <label class="label" for="task-team1">1st Fire Team</label>
+              <textarea id="task-team1" class="input textarea" rows="2" placeholder="WHO does WHAT, WHERE, WHEN, WHY"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="task-team2">2nd Fire Team</label>
+              <textarea id="task-team2" class="input textarea" rows="2" placeholder="WHO does WHAT, WHERE, WHEN, WHY"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="task-team3">3rd Fire Team</label>
+              <textarea id="task-team3" class="input textarea" rows="2" placeholder="WHO does WHAT, WHERE, WHEN, WHY"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="task-attachments">Attachments</label>
+              <textarea id="task-attachments" class="input textarea" rows="2" placeholder="Tasks for attached units..."></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Coordinating Instructions</legend>
+
+            <div class="form-group">
+              <label class="label" for="coord-timeline">Timeline</label>
+              <textarea id="coord-timeline" class="input textarea" rows="2" placeholder="Key times and phases..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-priority-fires">Priority of Fires</label>
+              <input type="text" id="coord-priority-fires" class="input" placeholder="e.g., 1st Team, 2nd Team, 3rd Team">
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-roe">Rules of Engagement</label>
+              <textarea id="coord-roe" class="input textarea" rows="2" placeholder="Applicable ROE..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-mopp">MOPP Level</label>
+              <select id="coord-mopp" class="input select">
+                <option value="">Select MOPP Level...</option>
+                <option value="MOPP 0">MOPP 0</option>
+                <option value="MOPP 1">MOPP 1</option>
+                <option value="MOPP 2">MOPP 2</option>
+                <option value="MOPP 3">MOPP 3</option>
+                <option value="MOPP 4">MOPP 4</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-contact">Actions on Contact</label>
+              <textarea id="coord-contact" class="input textarea" rows="2" placeholder="What to do if contact occurs..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-objective">Actions at Objective</label>
+              <textarea id="coord-objective" class="input textarea" rows="2" placeholder="What to do at the objective..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-consolidation">Consolidation/Reorganization</label>
+              <textarea id="coord-consolidation" class="input textarea" rows="2" placeholder="Post-action plan..."></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="coord-formation">Movement Formation</label>
+                <input type="text" id="coord-formation" class="input" placeholder="e.g., Wedge">
+              </div>
+              <div class="form-group">
+                <label class="label" for="coord-technique">Movement Technique</label>
+                <select id="coord-technique" class="input select">
+                  <option value="">Select...</option>
+                  <option value="Traveling">Traveling</option>
+                  <option value="Traveling Overwatch">Traveling Overwatch</option>
+                  <option value="Bounding Overwatch">Bounding Overwatch</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="coord-departure">Departure/Reentry of Lines</label>
+              <textarea id="coord-departure" class="input textarea" rows="2" placeholder="Procedures for friendly lines..."></textarea>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <!-- ADMIN & LOGISTICS Section -->
+      <div id="form-admin" class="section-form">
+        <div class="form-section">
+          <h2 class="section-title">Admin & Logistics</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Cover administrative and logistical matters.</p>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Administration</legend>
+
+            <div class="form-group">
+              <label class="label" for="admin-epw">EPW Handling</label>
+              <textarea id="admin-epw" class="input textarea" rows="2" placeholder="Prisoner handling procedures..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="admin-captured">Captured Material</label>
+              <textarea id="admin-captured" class="input textarea" rows="2" placeholder="Handling captured equipment..."></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Logistics</legend>
+
+            <div class="form-group">
+              <label class="label" for="log-ammo">Ammunition</label>
+              <textarea id="log-ammo" class="input textarea" rows="2" placeholder="Combat load, resupply..."></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="log-rations">Rations</label>
+                <textarea id="log-rations" class="input textarea" rows="2" placeholder="Meal plan..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="label" for="log-water">Water</label>
+                <textarea id="log-water" class="input textarea" rows="2" placeholder="Water source..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="log-equipment">Special Equipment</label>
+              <textarea id="log-equipment" class="input textarea" rows="2" placeholder="Additional gear..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="log-resupply">Resupply Point (Grid)</label>
+              <input type="text" id="log-resupply" class="input" placeholder="8-digit grid">
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">CASEVAC</legend>
+
+            <div class="form-group">
+              <label class="label" for="casevac-collection">Collection Point (Grid)</label>
+              <input type="text" id="casevac-collection" class="input" placeholder="8-digit grid">
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="casevac-route">Route</label>
+              <textarea id="casevac-route" class="input textarea" rows="2" placeholder="Route to medical..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="casevac-medical">Medical Support</label>
+              <textarea id="casevac-medical" class="input textarea" rows="2" placeholder="Available medical assets..."></textarea>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <!-- COMMAND & SIGNAL Section -->
+      <div id="form-command" class="section-form">
+        <div class="form-section">
+          <h2 class="section-title">Command & Signal</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Establish command and communication procedures.</p>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Command</legend>
+
+            <div class="form-group">
+              <label class="label" for="cmd-location">Location of Commander</label>
+              <input type="text" id="cmd-location" class="input" placeholder="Where you will be...">
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="cmd-succession">Succession of Command</label>
+              <textarea id="cmd-succession" class="input textarea" rows="2" placeholder="1. SL, 2. 1st TL, 3. ..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="cmd-cp">CP Location (Grid)</label>
+              <input type="text" id="cmd-cp" class="input" placeholder="8-digit grid">
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Frequencies (PACE)</legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="freq-primary">Primary</label>
+                <input type="text" id="freq-primary" class="input" placeholder="Primary freq">
+              </div>
+              <div class="form-group">
+                <label class="label" for="freq-alternate">Alternate</label>
+                <input type="text" id="freq-alternate" class="input" placeholder="Alternate freq">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="freq-contingency">Contingency</label>
+                <input type="text" id="freq-contingency" class="input" placeholder="Contingency freq">
+              </div>
+              <div class="form-group">
+                <label class="label" for="freq-emergency">Emergency</label>
+                <input type="text" id="freq-emergency" class="input" placeholder="Emergency freq">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Call Signs</legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="callsign-higher">Higher</label>
+                <input type="text" id="callsign-higher" class="input" placeholder="Higher call sign">
+              </div>
+              <div class="form-group">
+                <label class="label" for="callsign-this">This Unit</label>
+                <input type="text" id="callsign-this" class="input" placeholder="Your call sign">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="callsign-subordinates">Subordinates</label>
+              <textarea id="callsign-subordinates" class="input textarea" rows="2" placeholder="1st: Alpha, 2nd: Bravo..."></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend">Signals</legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="signal-shiftfire">Shift Fire</label>
+                <input type="text" id="signal-shiftfire" class="input" placeholder="Signal">
+              </div>
+              <div class="form-group">
+                <label class="label" for="signal-ceasefire">Cease Fire</label>
+                <input type="text" id="signal-ceasefire" class="input" placeholder="Signal">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="signal-assault">Assault</label>
+                <input type="text" id="signal-assault" class="input" placeholder="Signal">
+              </div>
+              <div class="form-group">
+                <label class="label" for="signal-rally">Rally Point</label>
+                <input type="text" id="signal-rally" class="input" placeholder="Location">
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="form-group">
+            <label class="label" for="pyrotechnics">Pyrotechnics</label>
+            <textarea id="pyrotechnics" class="input textarea" rows="2" placeholder="Green star = Assault..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label" for="challenge-password">Challenge/Password</label>
+              <input type="text" id="challenge-password" class="input" placeholder="e.g., Thunder/Lightning">
+            </div>
+            <div class="form-group">
+              <label class="label" for="running-password">Running Password</label>
+              <input type="text" id="running-password" class="input" placeholder="Far recognition">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label" for="number-combo">Number Combination</label>
+              <input type="text" id="number-combo" class="input" placeholder="e.g., Equals 7">
+            </div>
+            <div class="form-group">
+              <label class="label" for="time-hack">Time Hack</label>
+              <input type="text" id="time-hack" class="input" placeholder="e.g., 0545">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Install App / Offline Guide -->
+      <details class="form-section" id="install-guide">
+        <summary class="section-title" style="cursor: pointer; list-style: none;">
+          Install for Offline Use
+        </summary>
+        <div style="margin-top: 16px;">
+          <p class="help-text" style="margin-bottom: 1rem;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+          <button type="button" id="pwa-install-btn" class="btn btn-primary btn-sm" style="display: none; margin-bottom: 1rem;" onclick="App.installPWA()">
+            Install App
+          </button>
+
+          <p class="help-text" style="margin-bottom: 0.5rem;"><strong>Desktop (Chrome/Edge):</strong></p>
+          <p class="help-text" style="margin-bottom: 1rem;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+          <p class="help-text" style="margin-bottom: 0.5rem;"><strong>iPhone/iPad:</strong></p>
+          <p class="help-text" style="margin-bottom: 1rem;">Tap Share → "Add to Home Screen"</p>
+
+          <p class="help-text" style="margin-bottom: 0.5rem;"><strong>Android:</strong></p>
+          <p class="help-text" style="margin-bottom: 1rem;">Tap the menu (3 dots) → "Add to Home Screen" or "Install App"</p>
+
+          <p class="help-text" style="margin-top: 1rem; opacity: 0.8;"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+        </div>
+      </details>
+
+    </main>
+
+    <footer>
+      <p><strong>OSMEAC Generator v1.0</strong></p>
+      <p>Part of <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> · <a href="https://github.com/jeranaias/osmeac-generator">GitHub</a> · <a href="https://github.com/jeranaias/osmeac-generator/issues">Report Issue</a></p>
+    </footer>
+  </div>
+
+  <!-- Save Order Modal -->
+  <div id="save-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Save Order</h3>
+      </div>
+      <div class="modal__body">
+        <div class="form-group">
+          <label class="label" for="save-order-name">Order Name</label>
+          <input type="text" id="save-order-name" class="input" placeholder="e.g., Squad Attack OBJ Alpha">
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button id="save-modal-cancel" class="btn btn-outline">Cancel</button>
+        <button id="save-modal-confirm" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Order Modal -->
+  <div id="load-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Load Order</h3>
+      </div>
+      <div class="modal__body">
+        <div id="saved-orders-list" class="saved-orders-list">
+          <p class="text-secondary text-sm">No saved orders found.</p>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button id="load-modal-cancel" class="btn btn-outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Share Modal -->
+  <div id="qr-share-modal" class="modal-overlay">
+    <div class="modal qr-modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Share Order via QR Code</h3>
+        <button type="button" id="qr-modal-close" class="modal__close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal__body qr-modal__body">
+        <p class="qr-instructions">Have the recipient scan this QR code with their phone camera. The order will open directly in their browser.</p>
+        <div id="qr-code-container" class="qr-code-container">
+          <div class="qr-placeholder">Generating QR Code...</div>
+        </div>
+        <p id="qr-error" class="qr-error" style="display: none;"></p>
+        <p id="qr-data-size" class="qr-data-size" style="display: none;"></p>
+        <div class="qr-requirements">
+          <strong>For offline use:</strong> Both sender and recipient must have visited this site at least once before going offline. The app caches automatically on first visit.
+        </div>
+        <p class="qr-note">Once cached, works completely offline - no internet required.</p>
+      </div>
+      <div class="modal__footer">
+        <button id="qr-copy-url" class="btn btn-outline">Copy Share URL</button>
+        <button id="qr-modal-done" class="btn btn-primary">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="alert">
+    <span id="toastMessage"></span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/lib/lz-string.min.js"></script>
+  <script src="js/lib/qrcode.min.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/qr-share.js"></script>
+  <script src="js/tactical-tasks.js"></script>
+  <script src="js/sections/orientation.js"></script>
+  <script src="js/sections/situation.js"></script>
+  <script src="js/sections/mission.js"></script>
+  <script src="js/sections/execution.js"></script>
+  <script src="js/sections/admin-logistics.js"></script>
+  <script src="js/sections/command-signal.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/example-data.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    }
+  </script>
+</body>
+</html>

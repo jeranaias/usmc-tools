@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Award Write-Up Generator | USMC Citation & SOA Builder</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Free online tool for Marines to build NAM, NCM, MSM citations and Summary of Action narratives with proper SECNAV M-1650.1 formatting, character limits, and action verb banks.">
+  <meta name="keywords" content="NAM citation, NCM citation, MSM citation, USMC awards, Navy Achievement Medal, Marine Corps awards, award write-up, citation generator, Summary of Action, SOA builder, military awards, SECNAV M-1650.1">
+  <meta name="author" content="USMC Tools">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Award Write-Up Generator | USMC Citation Builder">
+  <meta property="og:description" content="Free tool for building NAM/NCM/MSM citations with proper formatting and character limits.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B0000">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Award Writer">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Live Preview Pane -->
+  <div id="livePreviewPane" class="live-preview-pane">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button type="button" class="preview-close" onclick="toggleLivePreview()" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="previewLoading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating preview...</span>
+    </div>
+    <iframe id="previewFrame" class="preview-frame" title="PDF Preview"></iframe>
+  </div>
+
+  <div class="container" id="mainContainer">
+    <header>
+      <div class="header-controls">
+        <button type="button" class="theme-toggle" onclick="toggleTheme()" title="Toggle theme (Dark/Light/Night)" aria-label="Toggle theme">🌙</button>
+      </div>
+      <h1>AWARD WRITE-UP GENERATOR</h1>
+      <p class="subtitle">SECNAV M-1650.1 Compliant Citations</p>
+    </header>
+
+    <p class="intro-link">
+      Free tool for Marines · <a href="https://github.com/jeranaias/award-writeup-generator#readme" target="_blank" rel="noopener noreferrer">Documentation & Guide &rarr;</a>
+    </p>
+
+    <main id="main">
+      <!-- Award Type Selection -->
+      <div class="form-section">
+        <h2 class="section-title">Award Type</h2>
+        <div class="award-type-selector" role="radiogroup">
+          <div class="award-type-option selected" data-type="NAM" onclick="selectAwardType('NAM')" tabindex="0" role="radio" aria-checked="true">
+            <h3>NAM</h3>
+            <p>Achievement Medal</p>
+            <span class="award-limit">8 lines max</span>
+          </div>
+          <div class="award-type-option" data-type="NCM" onclick="selectAwardType('NCM')" tabindex="0" role="radio" aria-checked="false">
+            <h3>NCM</h3>
+            <p>Commendation Medal</p>
+            <span class="award-limit">8 lines max</span>
+          </div>
+          <div class="award-type-option" data-type="MSM" onclick="selectAwardType('MSM')" tabindex="0" role="radio" aria-checked="false">
+            <h3>MSM</h3>
+            <p>Meritorious Service</p>
+            <span class="award-limit">23 lines max</span>
+          </div>
+          <div class="award-type-option" data-type="other" onclick="toggleOtherAwards()" tabindex="0" role="radio" aria-checked="false">
+            <h3>Other</h3>
+            <p>BSM, LOM, LoA, MM...</p>
+            <span class="award-limit">Various</span>
+          </div>
+        </div>
+        <div id="otherAwardsPanel" class="other-awards-panel" style="display: none;">
+          <select id="otherAwardSelect" class="award-select" onchange="selectOtherAward(this.value)">
+            <option value="">Select other award type...</option>
+            <option value="BSM">Bronze Star Medal (BSM)</option>
+            <option value="LOM">Legion of Merit (LOM)</option>
+            <option value="LoA">Letter of Appreciation</option>
+            <option value="LoC">Letter of Commendation</option>
+            <option value="CoC">Certificate of Commendation</option>
+            <option value="MM">Meritorious Mast</option>
+          </select>
+        </div>
+        <input type="hidden" id="awardType" value="NAM">
+
+        <!-- Quick Actions -->
+        <div class="quick-toolbar">
+          <button type="button" id="previewToggle" class="btn btn-primary" onclick="toggleLivePreview()">Live Preview</button>
+          <button type="button" class="btn btn-secondary" onclick="switchTab('verbs')">Action Verbs</button>
+        </div>
+      </div>
+
+      <!-- Awardee Information -->
+      <div class="form-section">
+        <h2 class="section-title">Awardee Information</h2>
+        <div class="form-row">
+          <div class="form-group small">
+            <label for="rank">Rank</label>
+            <select id="rank" class="input">
+              <optgroup label="Enlisted">
+                <option value="PRIVATE">Pvt</option>
+                <option value="PRIVATE FIRST CLASS">PFC</option>
+                <option value="LANCE CORPORAL">LCpl</option>
+                <option value="CORPORAL" selected>Cpl</option>
+                <option value="SERGEANT">Sgt</option>
+                <option value="STAFF SERGEANT">SSgt</option>
+                <option value="GUNNERY SERGEANT">GySgt</option>
+                <option value="MASTER SERGEANT">MSgt</option>
+                <option value="FIRST SERGEANT">1stSgt</option>
+                <option value="MASTER GUNNERY SERGEANT">MGySgt</option>
+                <option value="SERGEANT MAJOR">SgtMaj</option>
+              </optgroup>
+              <optgroup label="Warrant Officers">
+                <option value="WARRANT OFFICER">WO</option>
+                <option value="CHIEF WARRANT OFFICER TWO">CWO2</option>
+                <option value="CHIEF WARRANT OFFICER THREE">CWO3</option>
+                <option value="CHIEF WARRANT OFFICER FOUR">CWO4</option>
+                <option value="CHIEF WARRANT OFFICER FIVE">CWO5</option>
+              </optgroup>
+              <optgroup label="Officers">
+                <option value="SECOND LIEUTENANT">2ndLt</option>
+                <option value="FIRST LIEUTENANT">1stLt</option>
+                <option value="CAPTAIN">Capt</option>
+                <option value="MAJOR">Maj</option>
+                <option value="LIEUTENANT COLONEL">LtCol</option>
+                <option value="COLONEL">Col</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" class="input" placeholder="JOHN A. SMITH">
+          </div>
+          <div class="form-group tiny">
+            <label for="gender">Gender</label>
+            <select id="gender" class="input">
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="billet">Billet/Position</label>
+            <input type="text" id="billet" class="input" placeholder="MOTOR TRANSPORT OPERATOR">
+          </div>
+          <div class="form-group">
+            <label for="unit">Unit</label>
+            <input type="text" id="unit" class="input" placeholder="1ST BATTALION, 5TH MARINES">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group small">
+            <label for="start-date">From</label>
+            <input type="month" id="start-date" class="input">
+          </div>
+          <div class="form-group small">
+            <label for="end-date">To</label>
+            <input type="month" id="end-date" class="input">
+          </div>
+          <div class="form-group">
+            <label>Approval Authority</label>
+            <div id="approvalAuthority" class="approval-display">O-6 and above</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="citation" onclick="switchTab('citation')">Citation Builder</button>
+        <button class="tab-btn" data-tab="soa" onclick="switchTab('soa')">Summary of Action</button>
+        <button class="tab-btn" data-tab="verbs" onclick="switchTab('verbs')">Action Verbs</button>
+      </div>
+
+      <!-- Citation Builder Tab -->
+      <div id="citation-tab" class="tab-content active">
+        <div class="form-section">
+          <div class="section-header-with-actions">
+            <h2 class="section-title">Achievement Narrative</h2>
+            <div class="char-badges">
+              <span id="charBadge" class="status-badge">0/650</span>
+              <span id="lineBadge" class="status-badge secondary">0/8 lines</span>
+            </div>
+          </div>
+          <p class="help-text" style="margin-bottom: 12px;">
+            Opening and closing sentences are auto-generated. Write the body achievements below.
+          </p>
+          <textarea id="citationBody" class="input textarea citation-input" rows="6" placeholder="Describe specific achievements using strong action verbs. Quantify impact with numbers, percentages, and dollar amounts..."></textarea>
+
+          <div class="quick-verbs">
+            <span class="quick-verbs-label">Insert:</span>
+            <button type="button" class="verb-btn" onclick="insertVerb('Led')">Led</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Managed')">Managed</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Trained')">Trained</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Coordinated')">Coordinated</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Achieved')">Achieved</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Implemented')">Implemented</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Supervised')">Supervised</button>
+            <button type="button" class="verb-btn" onclick="insertVerb('Executed')">Executed</button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Closing Attributes</h2>
+          <p class="help-text" style="margin-bottom: 12px;">Select exactly 3 attributes for the closing sentence.</p>
+          <div id="attributesGrid" class="attributes-grid">
+            <!-- Populated by JS -->
+          </div>
+          <p id="attributeStatus" class="attribute-status">Select 3 attributes</p>
+        </div>
+
+        <div class="actions-bar">
+          <div class="actions-primary">
+            <button type="button" class="btn btn-success btn-large" onclick="copyCitation()">Copy Citation</button>
+            <button type="button" class="btn btn-secondary" onclick="printCitation()">Print</button>
+          </div>
+          <div class="actions-secondary">
+            <button type="button" class="btn btn-outline" onclick="clearCitation()">Clear All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOA Tab -->
+      <div id="soa-tab" class="tab-content">
+        <div class="form-section">
+          <h2 class="section-title">1. Introduction</h2>
+          <textarea id="soaIntro" class="input textarea" rows="3" placeholder="Brief overview of duties and period of service..."></textarea>
+        </div>
+
+        <div class="form-section">
+          <div class="section-header-with-actions">
+            <h2 class="section-title">2. Specific Achievements</h2>
+            <button type="button" class="btn btn-sm btn-outline" onclick="addAchievement()">+ Add</button>
+          </div>
+          <div id="achievementsContainer">
+            <div class="achievement-block" data-index="0">
+              <div class="achievement-header">
+                <span class="achievement-letter">a.</span>
+              </div>
+              <textarea class="input textarea achievement-text" rows="3" placeholder="Action verb + specific accomplishment + quantified impact..."></textarea>
+              <div class="quant-row">
+                <input type="text" class="input input-sm quant-howmany" placeholder="How many? (50 Marines)">
+                <input type="text" class="input input-sm quant-percent" placeholder="% improvement?">
+                <input type="text" class="input input-sm quant-dollars" placeholder="$ value?">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">3. Impact</h2>
+          <textarea id="soaImpact" class="input textarea" rows="3" placeholder="Summarize overall contribution to mission accomplishment..."></textarea>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">4. Recommendation</h2>
+          <textarea id="soaRecommendation" class="input textarea" rows="2" placeholder="Based on the above, recommend for the [Award Name]..."></textarea>
+        </div>
+
+        <div class="actions-bar">
+          <div class="actions-primary">
+            <button type="button" class="btn btn-success btn-large" onclick="copySOA()">Copy SOA</button>
+            <button type="button" class="btn btn-secondary" onclick="printSOA()">Print</button>
+          </div>
+          <div class="actions-secondary">
+            <button type="button" class="btn btn-outline" onclick="clearSOA()">Clear All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Verbs Tab -->
+      <div id="verbs-tab" class="tab-content">
+        <div class="form-section">
+          <h2 class="section-title">Action Verb Bank</h2>
+          <p class="help-text" style="margin-bottom: 16px;">Click any verb to copy to clipboard.</p>
+          <div id="verbCategories">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Install App / Offline Guide -->
+      <details class="form-section" id="install-guide" style="margin-top: 16px;">
+        <summary class="section-title" style="cursor: pointer; list-style: none;">
+          <span style="margin-right: 8px;">&#9662;</span> Install for Offline Use
+        </summary>
+        <div style="padding-top: 16px;">
+          <p class="help-text" style="margin-bottom: 12px;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+          <button type="button" id="pwa-install-btn" class="btn btn-primary btn-sm" style="display: none; margin-bottom: 16px;" onclick="App.installPWA()">
+            Install App
+          </button>
+
+          <p class="help-text" style="margin-bottom: 4px;"><strong>Desktop (Chrome/Edge):</strong></p>
+          <p class="help-text" style="margin-bottom: 12px;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+          <p class="help-text" style="margin-bottom: 4px;"><strong>iPhone/iPad:</strong></p>
+          <p class="help-text" style="margin-bottom: 12px;">Tap Share → "Add to Home Screen"</p>
+
+          <p class="help-text" style="margin-bottom: 4px;"><strong>Android:</strong></p>
+          <p class="help-text" style="margin-bottom: 12px;">Tap the menu (⋮) → "Add to Home Screen" or "Install App"</p>
+
+          <p class="help-text" style="margin-top: 16px; opacity: 0.7;"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+        </div>
+      </details>
+    </main>
+
+    <footer>
+      <p><strong>Award Write-Up Generator v1.0</strong> &middot; SECNAV M-1650.1</p>
+      <p>Part of <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> &middot; <a href="https://github.com/jeranaias/award-writeup-generator">GitHub</a> &middot; <a href="https://github.com/jeranaias/award-writeup-generator/issues">Report Issue</a></p>
+    </footer>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="alert">
+    <span id="toastMessage"></span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="js/awards.js"></script>
+  <script src="js/verbs.js"></script>
+  <script src="js/attributes.js"></script>
+  <script src="js/formatter.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>

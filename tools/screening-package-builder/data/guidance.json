@@ -1,0 +1,316 @@
+{
+  "warrantOfficer": {
+    "overview": {
+      "title": "Warrant Officer Application Process",
+      "description": "The WO program selects technically proficient enlisted Marines for commissioning. The process typically takes 6-12 months from start to board results.",
+      "authority": "MCO 1040.42B, Annual MARADMIN"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Eligibility Verification",
+        "description": "Confirm you meet basic eligibility requirements before investing time in the package.",
+        "duration": "1-2 weeks",
+        "tasks": [
+          {
+            "task": "Review MCO 1040.42B eligibility requirements",
+            "details": "Verify TIS (8-22 yrs), TIG, GT score (110+), PFT (1st class), conduct record"
+          },
+          {
+            "task": "Check current MARADMIN for board dates",
+            "details": "MARADMINs are released in January each year with specific deadlines"
+          },
+          {
+            "task": "Identify target MOS",
+            "details": "Review NAVMC 1200.1 MOS Manual for WO MOSs in your field"
+          },
+          {
+            "task": "Consult with career planner",
+            "details": "Career planners can verify eligibility and provide guidance"
+          }
+        ],
+        "keyDates": ["MARADMIN release (typically January)", "Application deadline (typically March-April)"]
+      },
+      {
+        "phase": 2,
+        "name": "Medical Processing",
+        "description": "Complete commissioning physical. This is often the longest lead-time item.",
+        "duration": "4-8 weeks",
+        "tasks": [
+          {
+            "task": "Schedule commissioning physical",
+            "details": "Contact medical to schedule. May require referral to MEPS or larger facility."
+          },
+          {
+            "task": "Complete DD Form 2807-1",
+            "details": "Medical history - be thorough and honest. Gather supporting records."
+          },
+          {
+            "task": "Complete physical examination (DD 2808)",
+            "details": "Includes vision, hearing, bloodwork, urinalysis"
+          },
+          {
+            "task": "Obtain audiogram if needed",
+            "details": "Must be within 3 years of board date"
+          },
+          {
+            "task": "Address any medical waivers",
+            "details": "Work with medical to prepare waiver packages for any conditions"
+          }
+        ],
+        "tips": [
+          "Start this phase first - medical waivers can take months",
+          "Keep copies of all medical documentation",
+          "Fast for bloodwork if required"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Records Verification",
+        "description": "Gather and verify all personnel records are accurate and up to date.",
+        "duration": "2-4 weeks",
+        "tasks": [
+          {
+            "task": "Print BIR/BTR from MOL",
+            "details": "Verify all service information is accurate"
+          },
+          {
+            "task": "Print Education Screen from MCTFS",
+            "details": "Verify all PME, MCI, college credits are posted"
+          },
+          {
+            "task": "Print Awards Screen from MCTFS",
+            "details": "Verify all awards are posted. Submit corrections if needed."
+          },
+          {
+            "task": "Print Test Score Screen (ASVAB)",
+            "details": "Official MCTFS print only. Verify GT/EL scores meet requirements."
+          },
+          {
+            "task": "Verify security clearance in DISS",
+            "details": "Ensure clearance is current and eligible for required level"
+          }
+        ],
+        "tips": [
+          "Submit corrections through S-1 immediately - can take weeks",
+          "JST transcript for education verification",
+          "Get JPAS/DISS print from S-2"
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Application Preparation",
+        "description": "Prepare the application letter and supporting documents.",
+        "duration": "1-2 weeks",
+        "tasks": [
+          {
+            "task": "Draft application letter (NAVMC 10274 format)",
+            "details": "100-500 word essay. Address motivation, experience, leadership."
+          },
+          {
+            "task": "Review sample application from MCRC website",
+            "details": "Follow exact format. Reference sample for structure."
+          },
+          {
+            "task": "Complete NAVMC 11580 Command Screening Checklist",
+            "details": "Work with S-1 to complete all sections"
+          },
+          {
+            "task": "Document all tattoos with photos",
+            "details": "Clear photos of all body markings per MCO 1020.34H"
+          },
+          {
+            "task": "Gather any required waivers",
+            "details": "Prepare documentation for any required waivers"
+          }
+        ],
+        "letterFormat": {
+          "ssic": "1040",
+          "from": "Rank, First MI. Last, USMC",
+          "to": "Commandant of the Marine Corps (MMOA-3)",
+          "via": "(1) Commanding Officer [unit]",
+          "subj": "APPLICATION FOR THE WARRANT OFFICER PROGRAM",
+          "length": "100-500 words"
+        }
+      },
+      {
+        "phase": 5,
+        "name": "Command Endorsement",
+        "description": "Route package through chain of command for endorsements.",
+        "duration": "2-4 weeks",
+        "tasks": [
+          {
+            "task": "Schedule CO interview",
+            "details": "Required interview with Commanding Officer"
+          },
+          {
+            "task": "Obtain Company Commander endorsement",
+            "details": "First endorsement with recommendation"
+          },
+          {
+            "task": "Obtain Battalion Commander endorsement",
+            "details": "Intermediate endorsement"
+          },
+          {
+            "task": "Obtain First O-6 endorsement",
+            "details": "Required for all applications"
+          }
+        ],
+        "tips": [
+          "Brief each endorser on your qualifications",
+          "Provide them your package early for review",
+          "Track routing - packages get lost"
+        ]
+      },
+      {
+        "phase": 6,
+        "name": "Submission",
+        "description": "Submit completed package to MCRC.",
+        "duration": "1 week",
+        "tasks": [
+          {
+            "task": "Compile complete package",
+            "details": "Organize in order specified by MARADMIN"
+          },
+          {
+            "task": "Make copies of everything",
+            "details": "Keep complete copy for your records"
+          },
+          {
+            "task": "Submit via DoD SAFE",
+            "details": "Email to warrantofficerboard@marines.usmc.mil via DoD SAFE"
+          },
+          {
+            "task": "Confirm receipt",
+            "details": "Contact MCRC to confirm package received"
+          }
+        ],
+        "submissionEmail": "warrantofficerboard@marines.usmc.mil"
+      }
+    ],
+    "commonMistakes": [
+      "Starting medical too late - begin immediately",
+      "Not verifying records accuracy - check everything",
+      "Missing endorsements or incorrect routing",
+      "Not following exact format from sample application",
+      "Incomplete medical history disclosure",
+      "Submitting after deadline - no extensions granted"
+    ]
+  },
+  "recruiting": {
+    "overview": {
+      "title": "Recruiting Duty Screening Process",
+      "description": "Special Duty Assignment to Marine Corps Recruiting Command. 36-month tour at a Recruiting Station.",
+      "authority": "MCO 1326.6 (SCREENMAN)"
+    },
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Volunteer and Eligibility",
+        "description": "Express interest and verify eligibility for recruiting duty.",
+        "duration": "1 week",
+        "tasks": [
+          {
+            "task": "Submit volunteer statement",
+            "details": "Written statement to command expressing interest"
+          },
+          {
+            "task": "Verify eligibility per MCO 1326.6",
+            "details": "TIG/TIS, conduct, fitness requirements"
+          },
+          {
+            "task": "Contact career planner",
+            "details": "Discuss timing and HQMC selection process"
+          }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Screening Package",
+        "description": "Complete the SDA screening package.",
+        "duration": "2-4 weeks",
+        "tasks": [
+          {
+            "task": "Complete CO Screening/Interview Guide",
+            "details": "Command screening interview documentation"
+          },
+          {
+            "task": "Obtain HQMC MISSA screening",
+            "details": "Initiated by S-1 through HQMC"
+          },
+          {
+            "task": "Obtain credit check authorization and report",
+            "details": "Recruiting duty requires financial screening"
+          },
+          {
+            "task": "Obtain driving record (MVR)",
+            "details": "From state DMV, within 30 days"
+          },
+          {
+            "task": "Gather all personnel records",
+            "details": "BIR, awards, PFT/CFT, height/weight"
+          }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Medical and Admin",
+        "description": "Complete medical and administrative requirements.",
+        "duration": "2-4 weeks",
+        "tasks": [
+          {
+            "task": "Physical examination",
+            "details": "Within 2 years, DD 2808 or equivalent"
+          },
+          {
+            "task": "Dental readiness",
+            "details": "Must be Class 1 or 2"
+          },
+          {
+            "task": "Official photo",
+            "details": "Service uniform, within 6 months"
+          },
+          {
+            "task": "Update DD 93 and SGLI",
+            "details": "Verify emergency data and insurance"
+          }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Submission and Selection",
+        "description": "Submit package and await selection.",
+        "duration": "Varies",
+        "tasks": [
+          {
+            "task": "Submit complete package",
+            "details": "Via chain of command to Recruiting District"
+          },
+          {
+            "task": "Await HQMC SDA selection team",
+            "details": "Selection teams meet periodically"
+          },
+          {
+            "task": "If selected: Attend Recruiters School",
+            "details": "Upon selection, orders to Recruiters School"
+          }
+        ]
+      }
+    ],
+    "keyRequirements": {
+      "fitness": "1st Class PFT and CFT",
+      "conduct": "No NJP within 24 months, no courts-martial",
+      "financial": "Favorable credit check",
+      "driving": "Valid license, favorable MVR",
+      "appearance": "Within height/weight standards"
+    }
+  },
+  "generalTips": [
+    "Start early - most packages take 3-6 months to complete properly",
+    "Keep copies of everything - packages get lost",
+    "Track your routing - follow up regularly",
+    "Be honest on all forms - discrepancies are disqualifying",
+    "Use the checklist - missing items delay processing",
+    "Get endorser buy-in early - they need time to write meaningful endorsements"
+  ]
+}

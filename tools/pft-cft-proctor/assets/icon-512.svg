@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#8B0000"/>
+  <text x="256" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="white">PFT</text>
+  <text x="256" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="white">CFT</text>
+</svg>

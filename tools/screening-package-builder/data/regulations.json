@@ -1,0 +1,97 @@
+{
+  "regulations": {
+    "MCO_1040_42B": {
+      "name": "MCO 1040.42B",
+      "title": "Warrant Officer (WO) and Limited Duty Officer (LDO) Accession Programs",
+      "url": "https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/1918113/mco-104042b/",
+      "effectiveDate": "2019-07-16",
+      "description": "Governing order for WO and LDO programs. Contains eligibility requirements, application procedures, and selection criteria.",
+      "keyRequirements": {
+        "timeInService": "8-22 years for Regular, 8-26 years for Reserve",
+        "timeInGrade": "1 year as SSgt, 2 years as Sgt",
+        "gtScore": "110 minimum (waiverable to 100)",
+        "education": "High school diploma or equivalent",
+        "clearance": "Eligible for Secret minimum",
+        "pft": "1st Class within 12 months",
+        "conduct": "No court-martial convictions"
+      }
+    },
+    "MCO_1326_6": {
+      "name": "MCO 1326.6",
+      "title": "Selecting, Screening, and Preparing Enlisted Marines for Screenable Billets (SCREENMAN)",
+      "url": "https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/1760838/mco-13266-ch-1/",
+      "effectiveDate": "2019-04-09",
+      "description": "Governing order for SDA and independent duty assignments including Recruiting Duty, Drill Instructor, MSG, etc.",
+      "tourLengths": {
+        "recruiting": "36 months",
+        "drillInstructor": "36 months",
+        "msg": "24-36 months"
+      }
+    },
+    "SECNAV_M_5216_5": {
+      "name": "SECNAV M-5216.5",
+      "title": "Department of the Navy Correspondence Manual",
+      "url": "https://www.marines.mil/Portals/1/Publications/SECNAV%20M%205216.5.pdf",
+      "effectiveDate": "2010-03",
+      "description": "Standard for all DON correspondence. Governs letter format, endorsements, and administrative correspondence.",
+      "chapters": {
+        "1": "Correspondence Management",
+        "2": "Correspondence Standards and Procedures",
+        "7": "Correspondence Format",
+        "9": "Endorsements",
+        "10": "Memorandums"
+      },
+      "letterFormat": {
+        "margins": "1 inch minimum all sides",
+        "font": "12-point Times New Roman or Courier preferred",
+        "spacing": "Single-spaced within paragraphs, double between",
+        "paragraphs": "Number paragraphs, indent subparagraphs",
+        "ssic": "Four or five-digit Standard Subject Identification Code"
+      }
+    },
+    "MCO_1020_34H": {
+      "name": "MCO 1020.34H",
+      "title": "Marine Corps Uniform Regulations",
+      "url": "https://www.marines.mil/News/Publications/MCPEL/",
+      "description": "Uniform and grooming standards including tattoo policy.",
+      "tattooPolicy": {
+        "noContent": "No content tattoos that are obscene, gang-related, or discriminatory",
+        "noBrand": "No intentional brands or scarification",
+        "noHead": "No tattoos on head, neck, or hands (with limited exceptions)",
+        "documentation": "All tattoos must be documented with photos",
+        "waivers": "Some restrictions may be waiverable for prior service"
+      }
+    },
+    "DoDI_6130_03": {
+      "name": "DoDI 6130.03",
+      "title": "Medical Standards for Appointment, Enlistment, or Induction",
+      "description": "Medical qualification standards for military service and commissioning.",
+      "keyStandards": {
+        "vision": "Correctable to 20/20",
+        "hearing": "Within acceptable limits per audiogram",
+        "psychiatric": "No disqualifying mental health conditions",
+        "medical": "Varies by condition - waiver possible for many"
+      }
+    },
+    "MARADMIN_ANNUAL": {
+      "name": "Annual WO Selection Board MARADMIN",
+      "description": "Published annually with specific board dates, deadlines, and requirements. Check Marines.mil MARADMIN archive for current FY.",
+      "typicalTimeline": {
+        "maradminRelease": "January",
+        "applicationDeadline": "March-April",
+        "boardConvene": "June-July",
+        "resultsRelease": "August-September"
+      }
+    }
+  },
+  "ssicCodes": {
+    "1000": "Military Personnel",
+    "1040": "Officer Programs",
+    "1050": "Enlisted Programs",
+    "1300": "Assignments and Distribution",
+    "1326": "Special Duty Assignments",
+    "1500": "Training",
+    "5000": "General Administration",
+    "5216": "Correspondence"
+  }
+}

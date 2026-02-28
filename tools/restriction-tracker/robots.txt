@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jeranaias.github.io/restriction-tracker/sitemap.xml

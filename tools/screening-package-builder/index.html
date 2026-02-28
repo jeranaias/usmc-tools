@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screening Package Builder | Free USMC Package Tool | B-Billets & Boards</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Free online screening package builder for Marines. Build Warrant Officer, Recruiting Duty, and special duty packages. Track documents, generate cover sheets, ensure completeness. Works offline.">
+  <meta name="keywords" content="USMC screening package, warrant officer package, recruiting duty package, B-billet, special duty assignment, Marine Corps, military package builder, WO board, SDA screening, MCRC, MCO 1040.42B, MCO 1326.6">
+  <meta name="author" content="USMC Tools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jeranaias.github.io/screening-package-builder/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jeranaias.github.io/screening-package-builder/">
+  <meta property="og:title" content="Screening Package Builder | Free USMC Package Tool">
+  <meta property="og:description" content="Free tool for Marines. Build screening packages for Warrant Officer, Recruiting Duty, and special duty assignments. Track documents, generate cover sheets.">
+  <meta property="og:site_name" content="USMC Tools">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://jeranaias.github.io/screening-package-builder/">
+  <meta name="twitter:title" content="Screening Package Builder | Free USMC Package Tool">
+  <meta name="twitter:description" content="Free tool for Marines. Build screening packages for WO, Recruiting, and special duty. Works offline.">
+
+  <!-- Additional SEO -->
+  <meta name="application-name" content="Screening Package Builder">
+  <meta name="theme-color" content="#8B0000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SPB">
+
+  <!-- Structured Data - WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Screening Package Builder",
+    "alternateName": ["USMC Package Builder", "WO Package Builder", "Recruiting Package Builder"],
+    "description": "Free online tool for building USMC screening packages for Warrant Officer, Recruiting Duty, and special duty assignments",
+    "url": "https://jeranaias.github.io/screening-package-builder/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Works offline after first load.",
+    "softwareVersion": "1.0.0",
+    "datePublished": "2025-12-31",
+    "inLanguage": "en-US",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "USMC Tools"
+    },
+    "featureList": [
+      "Warrant Officer package checklist",
+      "Recruiting Duty package checklist",
+      "Document status tracking",
+      "Cover sheet generator",
+      "Routing/endorsement tracker",
+      "PDF export",
+      "Offline support",
+      "Dark mode"
+    ]
+  }
+  </script>
+
+  <!-- Structured Data - FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What documents are required for a Warrant Officer package?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A WO package requires approximately 19 documents including: Application Letter (NAVMC 10274), CO Interview/Recommendation, Command Screening Checklist, BIR/BTR Screen, Education Screen, Awards Screen, ASVAB scores, Security Clearance Evidence, DD 2807-1, DD 2808, IMR Screen, and more. This tool provides a complete checklist based on MCRC requirements."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this tool work on government computers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, this tool works on government computers including NMCI. It runs entirely in your browser with no installation required and no data is sent to external servers. All data is stored locally on your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my data secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, all data is stored locally in your browser using LocalStorage. No information is transmitted to any server. Your screening package data never leaves your device."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- jsPDF for PDF export (bundled locally) -->
+  <script src="lib/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Skip Link - Accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Live Preview Pane -->
+  <div id="live-preview-pane" class="live-preview-pane">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button type="button" class="preview-close" onclick="PreviewManager.close()" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="preview-loading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating preview...</span>
+    </div>
+    <iframe id="preview-frame" class="preview-frame" title="PDF Preview"></iframe>
+  </div>
+
+  <!-- ============================================
+       VIEW: Home / Package Selection
+       ============================================ -->
+  <div id="view-home" class="view view--active">
+    <div class="container">
+      <!-- Header -->
+      <header class="header no-print">
+        <div class="header-controls">
+          <button type="button" class="theme-toggle" onclick="ThemeManager.cycle()" aria-label="Toggle theme">
+            <span id="themeIcon" class="theme-icon">&#9788;</span>
+          </button>
+        </div>
+        <span class="header-logo" aria-hidden="true">&#128193;</span>
+        <h1>SCREENING PACKAGE BUILDER</h1>
+        <p class="subtitle">B-Billet & Board Package Tool</p>
+      </header>
+
+      <p class="intro-link">
+        Free tool for Marines · <a href="https://github.com/jeranaias/screening-package-builder#readme" target="_blank">Documentation & Guide &rarr;</a>
+      </p>
+
+      <!-- Main Content -->
+      <main id="main">
+        <!-- Package Type Selection -->
+        <div class="form-section">
+          <h2 class="section-title">Select Package Type</h2>
+          <p class="help-text">Choose the type of screening package you need to build.</p>
+          <div id="package-types" class="package-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Saved Packages -->
+        <div class="form-section">
+          <h2 class="section-title">Your Saved Packages</h2>
+          <p class="help-text">Resume working on a previously started package.</p>
+          <div id="saved-packages-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Install App / Offline Guide -->
+        <details class="form-section no-print" id="install-guide">
+          <summary class="section-title" style="cursor: pointer; margin-bottom: 0;">
+            Install for Offline Use
+          </summary>
+          <div class="help-text" style="margin-top: 16px;">
+            <p style="margin-bottom: 1rem;"><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+            <!-- Install Button (shown when PWA install is available) -->
+            <button type="button" id="pwa-install-btn" class="btn btn-primary" style="display: none; margin-bottom: 1rem;" onclick="App.installPWA()">
+              Install App
+            </button>
+
+            <p style="margin-bottom: 0.5rem;"><strong>Desktop (Chrome/Edge):</strong></p>
+            <p style="margin-bottom: 1rem;">Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+            <p style="margin-bottom: 0.5rem;"><strong>iPhone/iPad:</strong></p>
+            <p style="margin-bottom: 1rem;">Tap Share > "Add to Home Screen"</p>
+
+            <p style="margin-bottom: 0.5rem;"><strong>Android:</strong></p>
+            <p style="margin-bottom: 1rem;">Tap the menu (3 dots) > "Add to Home Screen" or "Install App"</p>
+          </div>
+        </details>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer no-print">
+        <p>
+          v1.0.0 · Free and open source · <a href="https://github.com/jeranaias/screening-package-builder">GitHub</a> · <a href="https://github.com/jeranaias/screening-package-builder/issues">Report Issue</a>
+        </p>
+        <p>
+          Part of the <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> suite
+        </p>
+        <p class="kbd-hints">
+          <span class="kbd">Ctrl</span>+<span class="kbd">P</span> Preview
+          <span class="kbd">Ctrl</span>+<span class="kbd">S</span> Save
+          <span class="kbd">Esc</span> Close
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================================
+       VIEW: Package Dashboard
+       ============================================ -->
+  <div id="view-dashboard" class="view">
+    <div class="container">
+      <!-- Header -->
+      <header class="header no-print">
+        <div class="header-controls">
+          <button type="button" class="theme-toggle" onclick="ThemeManager.cycle()" aria-label="Toggle theme">
+            <span class="theme-icon">&#9788;</span>
+          </button>
+        </div>
+        <h1 id="dashboard-title">PACKAGE DASHBOARD</h1>
+        <p id="dashboard-subtitle" class="subtitle"></p>
+      </header>
+
+      <!-- Quick Toolbar -->
+      <div class="quick-toolbar no-print">
+        <a href="#" id="btn-back-home" class="btn btn-secondary">&larr; Back to Home</a>
+        <button type="button" id="preview-toggle" class="btn btn-primary">Live Preview</button>
+        <div id="save-indicator" class="save-indicator">
+          <span class="save-indicator__dot"></span>
+          <span>Saved</span>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main style="padding-bottom: 100px;">
+        <!-- Deadline Banner -->
+        <div id="deadline-banner" class="deadline-banner" style="display: none;">
+          <span class="deadline-banner__icon">&#128197;</span>
+          <span class="deadline-banner__text"></span>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="form-section">
+          <h2 class="section-title">Package Progress</h2>
+          <div class="progress">
+            <div id="dashboard-progress-bar" class="progress__bar" style="width: 0%"></div>
+          </div>
+          <p id="dashboard-progress-text" class="progress__text">0% Complete</p>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div id="stat-complete" class="stat-item">
+              <div class="stat-item__icon text-success">&#9989;</div>
+              <div class="stat-item__value">0</div>
+              <div class="stat-item__label">Complete</div>
+            </div>
+            <div id="stat-needed" class="stat-item">
+              <div class="stat-item__icon" style="color: var(--warning);">&#9888;</div>
+              <div class="stat-item__value">0</div>
+              <div class="stat-item__label">Needed</div>
+            </div>
+            <div id="stat-waivers" class="stat-item">
+              <div class="stat-item__icon text-error">&#128221;</div>
+              <div class="stat-item__value">0</div>
+              <div class="stat-item__label">Waivers</div>
+            </div>
+            <div id="stat-signatures" class="stat-item">
+              <div class="stat-item__icon" style="color: var(--secondary);">&#9997;</div>
+              <div class="stat-item__value">0</div>
+              <div class="stat-item__label">Signatures</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs no-print">
+          <button class="tab tab--active" data-tab="checklist">Checklist</button>
+          <button class="tab" data-tab="coversheet">Cover Sheet</button>
+          <button class="tab" data-tab="routing">Routing</button>
+        </div>
+
+        <!-- Tab Panels -->
+        <div id="tab-checklist" class="tab-panel tab-panel--active">
+          <div id="checklist-container">
+            <!-- Dynamically populated by ChecklistManager -->
+          </div>
+        </div>
+
+        <div id="tab-coversheet" class="tab-panel">
+          <div id="coversheet-container">
+            <!-- Dynamically populated by CoverSheetGenerator -->
+          </div>
+        </div>
+
+        <div id="tab-routing" class="tab-panel">
+          <div id="routing-container">
+            <!-- Dynamically populated by RoutingManager -->
+          </div>
+        </div>
+      </main>
+
+      <!-- Action Bar -->
+      <div class="action-bar no-print">
+        <button id="btn-export-pdf" class="btn btn-primary">&#128196; Export PDF</button>
+        <button id="btn-delete-package" class="btn btn--danger">&#128465; Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MODALS
+       ============================================ -->
+
+  <!-- Modal Overlay -->
+  <div id="modal-overlay" class="modal-overlay">
+
+    <!-- Document Edit Modal -->
+    <div id="document-modal" class="modal">
+      <div class="modal__header">
+        <h3 id="modal-doc-title" class="modal__title">Document Name</h3>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="modal-doc-id">
+
+        <div class="mb-4">
+          <p id="modal-doc-description" class="text-sm text-secondary"></p>
+          <p class="text-sm mt-2">
+            <strong>Reference:</strong> <span id="modal-doc-reference"></span>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Status</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="doc-status" value="incomplete" class="radio">
+              Not Started
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="doc-status" value="complete" class="radio">
+              Complete
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="doc-status" value="na" class="radio">
+              Not Applicable
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="doc-status" value="waiver_needed" class="radio">
+              Waiver Required
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Date Completed</label>
+          <input type="date" id="modal-doc-date" class="input">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Notes</label>
+          <textarea id="modal-doc-notes" class="input textarea" placeholder="Add any notes..."></textarea>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button id="btn-cancel-document" class="btn btn--outline">Cancel</button>
+        <button id="btn-save-document" class="btn btn--primary">Save</button>
+      </div>
+    </div>
+
+    <!-- Routing Edit Modal -->
+    <div id="routing-modal" class="modal hidden">
+      <div class="modal__header">
+        <h3 id="routing-modal-title" class="modal__title">Edit Routing Step</h3>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="routing-step-id">
+
+        <div class="form-group">
+          <label class="label">Endorser Name/Rank</label>
+          <input type="text" id="routing-name" class="input" placeholder="e.g., Capt M. Johnson">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Status</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="routing-status" value="pending" class="radio">
+              Pending
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="routing-status" value="signed" class="radio">
+              Signed
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="routing-status" value="returned" class="radio">
+              Returned for Correction
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Date Signed</label>
+          <input type="date" id="routing-date" class="input">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Recommendation</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="routing-recommends" value="" class="radio">
+              Not Specified
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="routing-recommends" value="yes" class="radio">
+              Recommends
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="routing-recommends" value="no" class="radio">
+              Does Not Recommend
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button id="btn-cancel-routing" class="btn btn--outline">Cancel</button>
+        <button id="btn-save-routing" class="btn btn--primary">Save</button>
+      </div>
+    </div>
+
+    <!-- New Package Modal -->
+    <div id="new-package-modal" class="modal hidden">
+      <div class="modal__header">
+        <h3 id="new-package-modal-title" class="modal__title">New Package</h3>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="new-package-type">
+
+        <div class="form-group">
+          <label class="label label--required">Applicant Name (Last, First MI)</label>
+          <input type="text" id="new-package-name" class="input" placeholder="SMITH, John A.">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Rank</label>
+          <select id="new-package-rank" class="input select">
+            <option value="">Select Rank</option>
+            <option value="Pvt">Pvt</option>
+            <option value="PFC">PFC</option>
+            <option value="LCpl">LCpl</option>
+            <option value="Cpl">Cpl</option>
+            <option value="Sgt">Sgt</option>
+            <option value="SSgt">SSgt</option>
+            <option value="GySgt">GySgt</option>
+            <option value="MSgt">MSgt</option>
+            <option value="1stSgt">1stSgt</option>
+            <option value="MGySgt">MGySgt</option>
+            <option value="SgtMaj">SgtMaj</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Deadline</label>
+          <input type="date" id="new-package-deadline" class="input">
+          <p class="help-text">Package submission deadline</p>
+        </div>
+
+        <!-- WO Specific Fields -->
+        <div id="wo-specific-fields" style="display: none;">
+          <div class="form-group">
+            <label class="label">Target Board</label>
+            <input type="text" id="new-package-target-board" class="input" placeholder="FY26">
+          </div>
+        </div>
+
+        <!-- Recruiting Specific Fields -->
+        <div id="rec-specific-fields" style="display: none;">
+          <div class="form-group">
+            <label class="label">Preferred District</label>
+            <input type="text" id="new-package-preferred-district" class="input" placeholder="8th MCD">
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button id="btn-cancel-new-package" class="btn btn--outline">Cancel</button>
+        <button id="btn-create-package" class="btn btn--primary">Create Package</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/lib/storage.js"></script>
+  <script src="js/lib/date-utils.js"></script>
+  <script src="js/lib/theme.js"></script>
+  <script src="js/packages/warrant-officer.js"></script>
+  <script src="js/packages/recruiting.js"></script>
+  <script src="js/packages/index.js"></script>
+  <script src="js/checklist.js"></script>
+  <script src="js/cover-sheet.js"></script>
+  <script src="js/routing.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/preview-manager.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    }
+
+    // Hide install button after app installed
+    window.addEventListener('appinstalled', () => {
+      const installBtn = document.getElementById('pwa-install-btn');
+      if (installBtn) installBtn.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

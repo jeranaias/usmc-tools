@@ -1,0 +1,27 @@
+{
+  "name": "Pros/Cons Generator",
+  "short_name": "Pros/Cons",
+  "description": "Generate proficiency and conduct marking statements with keyword banks and templates for USMC counselings.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#8B0000",
+  "theme_color": "#8B0000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "en-US"
+}

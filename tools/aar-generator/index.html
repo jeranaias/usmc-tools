@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate properly formatted After Action Reports following USMC TECOM format with MCCLL-compatible structure">
+  <title>AAR Generator - USMC Tools</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4A0000">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Skip Link - Accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="header no-print">
+    <div class="header__container">
+      <div class="header__brand">
+        <span class="header__logo" aria-hidden="true">&#128203;</span>
+        <div>
+          <h1 class="header__title">AFTER ACTION REPORT GENERATOR</h1>
+          <p class="header__subtitle">TECOM Format &bull; MCO 3504.1 Compliant</p>
+        </div>
+      </div>
+      <div class="header__actions">
+        <button type="button" id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme (Dark/Light/Night)">
+          <span class="theme-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tagline Bar -->
+  <div class="tagline-bar no-print">
+    Free tool for Marines &bull; <a href="https://github.com/jeranaias/aar-generator#readme">Documentation &amp; Guide &rarr;</a>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main" class="main-content">
+    <form id="aar-form" class="aar-form" novalidate>
+
+      <!-- Section 1: Unit Information -->
+      <section class="card">
+        <div class="card__header">
+          <h2 class="card__title">Unit Information</h2>
+        </div>
+        <div class="form-grid">
+          <!-- Unit Search -->
+          <div class="form-group form-group--full search-wrapper">
+            <label for="unitSearch" class="label">Search Units</label>
+            <input type="text" id="unitSearch" class="input" placeholder="Type to search USMC units..." autocomplete="off">
+            <div id="unitResults" class="search-results"></div>
+          </div>
+          <div class="form-group form-group--full">
+            <label for="unitName" class="label label--required">Unit Name</label>
+            <input type="text" id="unitName" class="input" placeholder="e.g., 1ST BATTALION, 5TH MARINES" required>
+          </div>
+          <div class="form-group form-group--full">
+            <label for="unitAddress1" class="label">Address Line 1</label>
+            <input type="text" id="unitAddress1" class="input" placeholder="e.g., BOX 555500">
+          </div>
+          <div class="form-group form-group--full">
+            <label for="unitAddress2" class="label">Address Line 2</label>
+            <input type="text" id="unitAddress2" class="input" placeholder="e.g., CAMP PENDLETON CA 92055">
+          </div>
+          <!-- SSIC with search -->
+          <div class="form-group search-wrapper">
+            <label for="ssic" class="label">SSIC</label>
+            <input type="text" id="ssic" class="input" value="3504" placeholder="Search codes..." autocomplete="off">
+            <div id="ssicResults" class="search-results"></div>
+          </div>
+          <!-- Office Code with search -->
+          <div class="form-group search-wrapper">
+            <label for="officeCode" class="label">Office Code</label>
+            <input type="text" id="officeCode" class="input" placeholder="e.g., S-3" autocomplete="off">
+            <div id="officeCodeResults" class="search-results"></div>
+          </div>
+          <div class="form-group">
+            <label for="documentDate" class="label label--required">Document Date</label>
+            <input type="date" id="documentDate" class="input" required>
+          </div>
+        </div>
+      </section>
+
+      <!-- Primary Action Buttons -->
+      <div class="primary-actions no-print">
+        <button type="button" id="previewToggle" class="btn btn--preview" aria-pressed="false">
+          Live Preview
+        </button>
+        <button type="button" id="loadExampleBtn" class="btn btn--outline">
+          Load Example
+        </button>
+      </div>
+
+      <!-- Section 2: From / To -->
+      <section class="card">
+        <div class="card__header">
+          <h2 class="card__title">From / To</h2>
+          <p class="card__subtitle">Naval letter format uses billets, not personal names</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group form-group--full">
+            <label for="fromBillet" class="label label--required">From</label>
+            <input type="text" id="fromBillet" class="input" placeholder="e.g., Training Officer" required>
+            <p class="help-text">Organizational billet (your name goes in signature block)</p>
+          </div>
+          <div class="form-group form-group--full">
+            <label for="toTitle" class="label label--required">To</label>
+            <input type="text" id="toTitle" class="input" value="Operations Officer" placeholder="e.g., Operations Officer" required>
+            <p class="help-text">Recipient's organizational billet</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Event Details -->
+      <section class="card">
+        <div class="card__header">
+          <h2 class="card__title">Event Details</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group form-group--full">
+            <label for="eventName" class="label label--required">Event Name</label>
+            <input type="text" id="eventName" class="input" placeholder="e.g., LIVE FIRE RANGE 400" required>
+          </div>
+          <div class="form-group">
+            <label for="eventStartDate" class="label label--required">Start Date</label>
+            <input type="date" id="eventStartDate" class="input" required>
+          </div>
+          <div class="form-group">
+            <label for="eventEndDate" class="label label--required">End Date</label>
+            <input type="date" id="eventEndDate" class="input" required>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: IMPROVE Topics -->
+      <section class="card">
+        <div class="card__header">
+          <h2 class="card__title">1. Improve</h2>
+          <p class="card__subtitle">Areas that need improvement. Drag topics to reorder.</p>
+        </div>
+
+        <details class="guided-prompts">
+          <summary>Writing Prompts</summary>
+          <ul class="prompt-list">
+            <li><strong>What happened?</strong> Specific incident or observation</li>
+            <li><strong>When/where?</strong> Phase of operation, location</li>
+            <li><strong>Who was affected?</strong> Individuals, sections, or entire unit</li>
+            <li><strong>What was the impact?</strong> Mission, safety, efficiency</li>
+          </ul>
+        </details>
+
+        <div id="improveTopics" class="topics-container">
+          <!-- Topics will be added dynamically -->
+        </div>
+
+        <button type="button" id="addImprove" class="btn btn--outline btn--full mt-4">
+          + Add Improve Topic
+        </button>
+      </section>
+
+      <!-- Section 5: SUSTAIN Topics -->
+      <section class="card">
+        <div class="card__header">
+          <h2 class="card__title">2. Sustain</h2>
+          <p class="card__subtitle">Areas that were effective and should continue. Drag topics to reorder.</p>
+        </div>
+
+        <details class="guided-prompts">
+          <summary>Writing Prompts</summary>
+          <ul class="prompt-list">
+            <li><strong>What worked well?</strong> Specific actions or procedures</li>
+            <li><strong>How did it help?</strong> Contribution to mission success</li>
+            <li><strong>Why was it effective?</strong> Key factors</li>
+            <li><strong>Can it be replicated?</strong> Scalability to other units</li>
+          </ul>
+        </details>
+
+        <div id="sustainTopics" class="topics-container">
+          <!-- Topics will be added dynamically -->
+        </div>
+
+        <button type="button" id="addSustain" class="btn btn--outline btn--full mt-4">
+          + Add Sustain Topic
+        </button>
+      </section>
+
+      <!-- Section 6: POC & Signature -->
+      <section class="card">
+        <div class="card__header">
+          <h2 class="card__title">Point of Contact & Signature</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="pocRank" class="label label--required">POC Rank</label>
+            <select id="pocRank" class="input select" required>
+              <option value="">Select Rank</option>
+              <optgroup label="Enlisted">
+                <option value="Pvt">Pvt</option>
+                <option value="PFC">PFC</option>
+                <option value="LCpl">LCpl</option>
+                <option value="Cpl">Cpl</option>
+                <option value="Sgt">Sgt</option>
+                <option value="SSgt">SSgt</option>
+                <option value="GySgt">GySgt</option>
+                <option value="MSgt">MSgt</option>
+                <option value="1stSgt">1stSgt</option>
+                <option value="MGySgt">MGySgt</option>
+                <option value="SgtMaj">SgtMaj</option>
+              </optgroup>
+              <optgroup label="Warrant Officer">
+                <option value="WO">WO</option>
+                <option value="CWO2">CWO2</option>
+                <option value="CWO3">CWO3</option>
+                <option value="CWO4">CWO4</option>
+                <option value="CWO5">CWO5</option>
+              </optgroup>
+              <optgroup label="Officer">
+                <option value="2ndLt">2ndLt</option>
+                <option value="1stLt">1stLt</option>
+                <option value="Capt">Capt</option>
+                <option value="Maj">Maj</option>
+                <option value="LtCol">LtCol</option>
+                <option value="Col">Col</option>
+                <option value="BGen">BGen</option>
+                <option value="MajGen">MajGen</option>
+                <option value="LtGen">LtGen</option>
+                <option value="Gen">Gen</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pocName" class="label label--required">POC Name</label>
+            <input type="text" id="pocName" class="input" placeholder="e.g., John A Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="pocPhone" class="label label--required">Phone</label>
+            <input type="tel" id="pocPhone" class="input" placeholder="(XXX) XXX-XXXX" required>
+          </div>
+          <div class="form-group">
+            <label for="pocEmail" class="label label--required">Email</label>
+            <input type="email" id="pocEmail" class="input" placeholder="name@usmc.mil" required>
+          </div>
+          <div class="form-group form-group--full">
+            <label for="signatureName" class="label label--required">Signature Name</label>
+            <input type="text" id="signatureName" class="input" placeholder="e.g., J. A. SMITH" required>
+            <p class="help-text">Initials and last name in caps (e.g., J. A. SMITH)</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <section class="card actions-card no-print">
+        <div class="card__header">
+          <h2 class="card__title">Export & Save</h2>
+        </div>
+        <div class="action-buttons">
+          <button type="button" id="exportPdfBtn" class="btn btn--primary btn--lg">
+            Export PDF
+          </button>
+          <button type="button" id="exportWordBtn" class="btn btn--primary btn--lg">
+            Export Word
+          </button>
+          <button type="button" id="copyBtn" class="btn btn--outline">
+            Copy Text
+          </button>
+          <button type="button" id="saveDraftBtn" class="btn btn--outline">
+            Save Draft
+          </button>
+          <button type="button" id="loadDraftBtn" class="btn btn--outline">
+            Load Draft
+          </button>
+          <button type="button" id="clearAllBtn" class="btn btn--ghost">
+            Clear All
+          </button>
+        </div>
+      </section>
+    </form>
+
+    <!-- Install App / Offline Guide -->
+    <details class="card install-guide no-print" id="install-guide">
+      <summary class="card__title">Install for Offline Use</summary>
+      <div class="install-guide__content text-sm text-secondary">
+        <p><strong>This tool works offline!</strong> After your first visit, you can use it without internet.</p>
+
+        <button type="button" id="pwa-install-btn" class="btn btn--primary btn--sm" style="display: none;" onclick="AARApp.installPWA()">
+          Install App
+        </button>
+
+        <p><strong>Desktop (Chrome/Edge):</strong> Click the install icon in the address bar, or use the "Install App" button above when available.</p>
+
+        <p><strong>iPhone/iPad:</strong> Tap Share, then "Add to Home Screen"</p>
+
+        <p><strong>Android:</strong> Tap the menu (3 dots), then "Add to Home Screen" or "Install App"</p>
+
+        <p class="text-secondary"><em>Once installed, the app icon appears on your home screen and works without internet.</em></p>
+      </div>
+    </details>
+  </main>
+
+  <!-- Live Preview Pane -->
+  <div id="livePreviewPane" class="live-preview-pane">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button type="button" class="preview-close" id="previewClose" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="previewLoading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating preview...</span>
+    </div>
+    <iframe id="previewFrame" class="preview-frame" title="PDF Preview"></iframe>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="alert" aria-live="polite">
+    <span class="toast__message" id="toastMessage"></span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer no-print">
+    <p class="footer__version">AAR Generator v1.0</p>
+    <p class="footer__links">
+      Part of <a href="https://jeranaias.github.io/usmc-tools/">USMC Tools</a> &bull;
+      <a href="https://github.com/jeranaias/aar-generator">GitHub</a> &bull;
+      <a href="https://github.com/jeranaias/aar-generator/issues">Report Issue</a>
+    </p>
+  </footer>
+
+  <!-- Topic Template -->
+  <template id="topicTemplate">
+    <div class="topic-card" data-topic-id="" draggable="true">
+      <div class="topic-header">
+        <div class="topic-header-left">
+          <span class="drag-handle" title="Drag to reorder" aria-hidden="true">&#9776;</span>
+          <span class="topic-label">Topic <span class="topic-letter"></span></span>
+        </div>
+        <div class="topic-actions">
+          <button type="button" class="btn btn--ghost btn--sm remove-topic" aria-label="Remove topic">
+            &times;
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label label--required">Topic Title</label>
+        <input type="text" class="input topic-title" placeholder="Brief one-line description" maxlength="100">
+        <div class="char-counter"><span class="char-count">0</span>/100</div>
+      </div>
+      <div class="form-group">
+        <label class="label label--required">Discussion</label>
+        <textarea class="input textarea topic-discussion" placeholder="Provide background and details about this topic..." rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label label--required">Recommendation</label>
+        <textarea class="input textarea topic-recommendation" placeholder="Specific actionable recommendations..." rows="3"></textarea>
+      </div>
+    </div>
+  </template>
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/lib/theme.js"></script>
+  <script src="js/lib/storage.js"></script>
+  <script src="js/lib/date-utils.js"></script>
+  <script src="js/lib/text-utils.js"></script>
+  <script src="js/lib/data-manager.js"></script>
+  <script src="js/aar-builder.js"></script>
+  <script src="js/pdf-generator.js"></script>
+  <script src="js/docx-generator.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>
